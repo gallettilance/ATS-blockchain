@@ -9,7 +9,14 @@
 
 (* ****** ****** *)
 
+abstype chain
+abstype block
 
+(* ****** ****** *)
+
+extern
+fun
+block_append(c: chain, b: block): chain
 
 (* ****** ****** *)
 

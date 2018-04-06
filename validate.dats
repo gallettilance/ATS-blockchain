@@ -9,7 +9,14 @@
 
 (* ****** ****** *)
 
+abstype chain
+abstype block
 
+(* ****** ****** *)
+
+extern
+fun
+validate(b: block): block
 
 (* ****** ****** *)
 
