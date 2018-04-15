@@ -91,10 +91,10 @@ fprint_block(out, b0) = let
 
   val head = b0.0
   val currh = b0.1
+  val tstamp = b0.2
   
   val block_num = "block #0" + int2str(head.0)
   val nounce = int2str(head.1)
-  
   val data = head.2
   
   val prevh = head.3
@@ -111,11 +111,18 @@ in
   
   print_line(out, row);
   fprint!(out, "|");
+  print_centered(out, "TimeStamp", col);
+  fprint!(out, "|");
+  print_centered(out, tstamp, row - col - 3);
+  fprint!(out, "|\n");
+  
+  print_line(out, row);
+  fprint!(out, "|");
   print_centered(out, "Nounce", col);
   fprint!(out, "|");
   print_centered(out, nounce, row - col - 3);
   fprint!(out, "|\n");
-  
+
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Data", col);
