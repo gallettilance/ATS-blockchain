@@ -126,16 +126,16 @@ in
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Previous Hash", col);
-  fprint!(out, "| ");
-  print_sha256(prevh);
-  fprint!(out, "  |\n");
+  fprint!(out, "|");
+  print_centered(out, prevh, row - col - 3);
+  fprint!(out, "|\n");
   
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Hash", col);
-  fprint!(out, "| ");
-  print_sha256(currh);
-  fprint!(out, "  |\n");
+  fprint!(out, "|");
+  print_centered(out, currh, row - col - 3);
+  fprint!(out, "|\n");
 
   print_line(out, row);
 )

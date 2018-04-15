@@ -65,13 +65,6 @@ void print_sha256(unsigned char *s) {
     printf("%02x", s[i]);
   return;
 }
-
-unsigned char aux0() {
-  int i = 0;
-  char c = i;
-  return c;
-}
-
 %}
 
 implement
@@ -79,14 +72,14 @@ hash0() =
 let
   fun aux(res: string, n: int): string =
     if n = 0 then res
-    else aux(res + string_make_list0(list0_sing(aux0())), n - 1)
+    else aux(res + "0", n - 1)
 in
   aux("", 64)
 end
 
 implement
 valid_hash(h) =
-  if h <= "\0\0\0\0\0\0\0\0"
+  if h <= "0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
   then true
   else false
 
