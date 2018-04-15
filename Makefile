@@ -27,7 +27,7 @@ testall:: all regress cleanall
 %_dats: \
 %.dats; \
 $(PATSCC) \
--o $@ $< -lssl -lcrypto
+-D_GNU_SOURCE -DATS_MEMALLOC_LIBC -o $@ $< -lssl -lcrypto
 
 ######
 

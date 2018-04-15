@@ -36,7 +36,8 @@ int2string(i, b) = let
         if i > 0 then helper(i / b, dig2str(i % b) + res)
         else res
 in
-  helper(i, "")
+  if i = 0 then "0"
+  else helper(i, "")
 end
 
 implement
@@ -91,7 +92,7 @@ fprint_block(out, b0) = let
   val head = b0.0
   val currh = b0.1
   
-  val block_num = "block #" + int2str(head.0)
+  val block_num = "block #0" + int2str(head.0)
   val nounce = int2str(head.1)
   
   val data = head.2
@@ -104,35 +105,39 @@ fprint_block(out, b0) = let
 in
 (
   print_line(out, row);
-  print_centered(out, block_num, row);
+  fprint!(out, "|");
+  print_centered(out, block_num, row - 2);
+  fprint!(out, "|\n");
   
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Nounce", col);
   fprint!(out, "|");
-  print_centered(out, nounce, row - col);
+  print_centered(out, nounce, row - col - 3);
   fprint!(out, "|\n");
   
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Data", col);
   fprint!(out, "|");
-  print_centered(out, data, row - col);
+  print_centered(out, data, row - col - 3);
   fprint!(out, "|\n");  
   
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Previous Hash", col);
-  fprint!(out, "|   ");
+  fprint!(out, "| ");
   print_sha256(prevh);
-  fprint!(out, "   |\n");
+  fprint!(out, "  |\n");
   
   print_line(out, row);
   fprint!(out, "|");
   print_centered(out, "Hash", col);
-  fprint!(out, "|   ");
+  fprint!(out, "| ");
   print_sha256(currh);
-  fprint!(out, "   |\n");
+  fprint!(out, "  |\n");
+
+  print_line(out, row);
 )
 end
 
