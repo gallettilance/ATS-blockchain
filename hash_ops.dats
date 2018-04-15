@@ -49,11 +49,11 @@ unsigned char * testsha256(char *s) {
 
 char * sha256(char *s) {
   unsigned char * h = SHA256(s, strlen(s), 0);
-  char temp[4*SHA256_DIGEST_LENGTH];
+  char *temp = malloc(4 * SHA256_DIGEST_LENGTH * sizeof(char));
   int i;
   
   for (i = 0; i < 2 * SHA256_DIGEST_LENGTH; i++)
-    sprintf(temp+(i*2), "%02x", h[i]);
+    sprintf(temp+(i * 2), "%02x", h[i]);
   temp[i] = '\0';
   
   return temp;
