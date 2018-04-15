@@ -14,9 +14,9 @@ PATSLIB=$(PATSHOME)/ccomp/atslib
 
 ######
 
-all:: hash_dats
-regress:: hash_dats; ./$<
-cleanall:: ; rm -f hash_dats
+all:: test_dats
+regress:: test_dats; ./$<
+cleanall:: ; rm -f test_dats
 
 ######
 

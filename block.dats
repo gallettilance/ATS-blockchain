@@ -4,29 +4,13 @@
 //
 (* ****** ****** *)
 
-#include "share/atspre_staload.hats"
-#include "share/HATS/atspre_staload_libats_ML.hats"
-#include "./validate.dats"
 #include "./hash.dats"
 
 (* ****** ****** *)
 
-extern
-fun
-chain_append(c: chain, b: block): chain
-
-(* ****** ****** *)
-
-
-
-(* ****** ****** *)
-
-implement
-main0() = ()
-where
-{
-  
-}
+typedef header = ( (* index *) int, (* nounce *) int, (* data *) string, (* prevhash *) hash)
+typedef block = ( header, (* currhash *) hash)
+typedef chain = list0(block)
 
 (* ****** ****** *)
 
