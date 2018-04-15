@@ -41,7 +41,7 @@ in
 end
 
 implement
-int2str(n) = int2string(n, 2)
+int2str(n) = int2string(n, 10)
 
 (* ****** ****** *)
 

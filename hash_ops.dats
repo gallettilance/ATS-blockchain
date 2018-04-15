@@ -29,6 +29,10 @@ hash0(): string
 
 extern
 fun
+aux0(): char = "mac#"
+
+extern
+fun
 valid_hash(h: hash): bool
 
 (* ****** ****** *)
@@ -39,8 +43,20 @@ valid_hash(h: hash): bool
 #include <string.h>
 #include <openssl/sha.h>
 
-unsigned char * sha256(char *s) {
-  return SHA256(s, strlen(s), 0); 
+unsigned char * testsha256(char *s) {
+  return SHA256(s, strlen(s), 0);
+}
+
+char * sha256(char *s) {
+  unsigned char * h = SHA256(s, strlen(s), 0);
+  char temp[4*SHA256_DIGEST_LENGTH];
+  int i;
+  
+  for (i = 0; i < 2 * SHA256_DIGEST_LENGTH; i++)
+    sprintf(temp+(i*2), "%02x", h[i]);
+  temp[i] = '\0';
+  
+  return temp;
 }
 
 void print_sha256(unsigned char *s) {
@@ -49,25 +65,30 @@ void print_sha256(unsigned char *s) {
     printf("%02x", s[i]);
   return;
 }
+
+unsigned char aux0() {
+  int i = 0;
+  char c = i;
+  return c;
+}
+
 %}
 
 implement
-hash0() = let
+hash0() =
+let
   fun aux(res: string, n: int): string =
     if n = 0 then res
-    else aux(res + "0", n - 1)
+    else aux(res + string_make_list0(list0_sing(aux0())), n - 1)
 in
   aux("", 64)
 end
 
 implement
-valid_hash(h) = let
-  val hs = string_explode(h)
-in
-  if hs[0] = '0' andalso hs[1] = '0' andalso hs[2] = '0' andalso hs[3] = '0'
+valid_hash(h) =
+  if h <= "\0\0\0\0\0\0\0\0"
   then true
   else false
-end
 
 (* ****** ****** *)
 

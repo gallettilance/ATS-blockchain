@@ -12,11 +12,16 @@ implement
 main0() = ()
 where
 {
+  val hs = sha256("hello")
+  val () = println!(hs)
+(*
+  val () = println!(hs > "\0\0\0\0")
   val hd = (0, 0, "hello", hash0())
   val b = (hd, sha256(stringize(hd)))
   val () = println!(b)
   val mb = mine(b)
   val () = println!(mb)
+*)
 }
 
 (* ****** ****** *)
