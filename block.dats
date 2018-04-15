@@ -6,17 +6,14 @@
 
 #include "share/atspre_staload.hats"
 #include "share/HATS/atspre_staload_libats_ML.hats"
-
-(* ****** ****** *)
-
-abstype chain
-abstype block
+#include "./validate.dats"
+#include "./hash.dats"
 
 (* ****** ****** *)
 
 extern
 fun
-block_append(c: chain, b: block): chain
+chain_append(c: chain, b: block): chain
 
 (* ****** ****** *)
 
