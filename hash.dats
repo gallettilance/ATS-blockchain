@@ -15,15 +15,13 @@ typedef hash = string
 
 extern
 fun
-get_sha256(s: string): string = "mac#"
+print_sha256(hs: hash): void = "mac#"
+
+(* ****** ****** *)
 
 extern
 fun
-sha256(s: string): string
-
-extern
-fun
-hex(c: char): char = "mac#"
+sha256(s: string): string = "mac#"
 
 extern
 fun
@@ -41,21 +39,18 @@ gte_hash_hash(h1: hash, h2: hash): bool
 #include <string.h>
 #include <openssl/sha.h>
 
-unsigned char * get_sha256(char *s) {
+unsigned char * sha256(char *s) {
   return SHA256(s, strlen(s), 0); 
 }
 
-unsigned char hex(unsigned char c) {
-  return strtol (&c, NULL, 16);
+void print_sha256(unsigned char *s) {
+  int i;
+  for (i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    printf("%02x", s[i]);
+  printf("\n");
+  return;
 }
 %}
-
-implement
-sha256(s) = let
-  val xs = string_explode(s)
-in
-  string_implode(list0_map(xs, lam(x) => hex(x)))
-end
 
 (* ****** ****** *)
 
@@ -65,7 +60,8 @@ where
 {
   val s = "hello"
   val hash_s = sha256(s)
-  val () = println!("sha256(", s, ") is ", hash_s)
+  val () = print!("sha256(", s, ") is ")
+  val () = print_sha256(hash_s)
 }
 
 (* ****** ****** *)
