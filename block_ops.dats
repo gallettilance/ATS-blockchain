@@ -28,7 +28,7 @@ validate(c: chain): block
 
 extern
 fun
-chain_append(c: chain, b: block): chain
+chain_append(c: chain, data: string): chain
 
 (* ****** ****** *)
 
@@ -56,14 +56,26 @@ mine(b) = let
     in
       if valid_hash(currh) then (hd, currh)
       else let
-        val (ind, nounce, data, prevh) = hd
+        val (ind, nonce, data, prevh) = hd
       in
-        aux((ind, nounce + 1, data, prevh))
+        aux((ind, nonce + 1, data, prevh))
       end
     end
 in
   aux(b.0)
 end
+
+implement
+chain_append(c, data) = let
+  val-cons0(b0, c0) = list0_reverse(c)
+  val (hd, currh) = b0
+  val (ind, _, _, _) = hd
+  val nexthd = (ind + 1, 0, data, currh)
+  val nextblock = (nexthd, sha256(stringize(nexthd)))
+in
+  list0_append<block>(c, list0_sing(mine(nextblock)))
+end
+
 
 (* ****** ****** *)
 
