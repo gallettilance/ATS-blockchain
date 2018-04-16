@@ -11,6 +11,7 @@
 #include "./hash_ops.dats"
 #include "./print_block.dats"
 #include "./block_ops.dats"
+#include "./cli.dats"
 
 (* ****** ****** *)
 

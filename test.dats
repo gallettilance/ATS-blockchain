@@ -12,6 +12,8 @@ implement
 main0() = ()
 where
 {
+  val () = cli_start(streamize_fileref_line(stdin_ref))
+(*
   val hs = sha256("hello")
   val hd = (0, 0, "hello", hash0())
   val mb = mine(hd)
@@ -21,6 +23,7 @@ where
   val xc2 = chain_append(xc1, "a blockchain...")
   val xc3 = chain_append(xc2, "neat!")
   val () = (xc3).foreach()(lam(b) => println!(b))
+*)
 }
 
 (* ****** ****** *)
