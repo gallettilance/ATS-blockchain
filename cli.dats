@@ -30,20 +30,20 @@ implement
 cli_start(lines) = let
   val () = println!("Welcome to my blockchain in ATS!                         ")
   val () = println!()
-  val () = println!()
   val () = println!("Commands:                                                ")
-  val () = println!()
-  val () = println!("    exit                Exits application                ")
   val () = println!("    mine <data>         Mines a new block                ")
   val () = println!("    blockchain          View current state of blockchain ")
   val () = println!()
+  val () = println!("ctrl-C to quit")
+  val () = println!()
+  
 in
   read_loop(lines)
 end
 
 implement
 read_loop(lines) = let
-  val () = fprint!(stdout_ref, "blockcain> ")
+  val () = fprint!(stdout_ref, "blockchain> ")
   val-~stream_vt_cons(l, lines) = !lines
 in
    (cli_do(l); read_loop(lines))
