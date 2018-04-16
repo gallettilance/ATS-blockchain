@@ -168,7 +168,11 @@ print_centered(out, s, n) = let
 in
   (
     print_blank(out, lpad);
-    fprint!(out, s);
+    (
+      if list0_length(string_explode(s)) = 64
+      then fprint!(out, fg(reset(), YELLOW), s, reset())
+      else fprint!(out, s)
+    );
     print_blank(out, rpad)
   )
 end
