@@ -65,7 +65,7 @@ in
   | list0_cons(a, args) =>
       case+ a of
       | "exit" => cli_stop()
-      | "mine" => let val-cons0(a, _) = args in chain_append(get_chain(), a) end
+      | "mine" => let val a = list0_foldleft<string>(args, "", lam(res, x) => res + " " + x) in chain_append(get_chain(), a) end
       | "blockchain" => let val ch = get_chain() in (ch).foreach()(lam(b) => println!(b)) end
       | _ => ()
 end
