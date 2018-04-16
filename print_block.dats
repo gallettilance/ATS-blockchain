@@ -158,7 +158,7 @@ else (fprint!(out, " "); print_blank(out, n - 1))
 implement
 print_line(out, n) =
 if n = 0 then fprint!(out, "\n")
-else (fprint!(out, fg(reset(), BLACK), "-", reset()); print_line(out, n - 1))
+else (fprint!(out, fg(reset(), BLUE), "-", reset()); print_line(out, n - 1))
 
 implement
 print_centered(out, s, n) = let
@@ -193,8 +193,6 @@ print_arrow() =
   print_centered(stdout_ref, "|", 87);
   fprint!(stdout_ref, '\n');
   print_centered(stdout_ref, "|", 87);
-  fprint!(stdout_ref, '\n');
-  print_centered(stdout_ref, "V", 87);
   fprint!(stdout_ref, '\n');
   fprint!(stdout_ref, '\n');
 )

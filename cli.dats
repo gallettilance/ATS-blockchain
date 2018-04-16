@@ -43,7 +43,7 @@ end
 
 implement
 read_loop(lines) = let
-  val () = fprint!(stdout_ref, "blockchain> ")
+  val () = fprint!(stdout_ref, fg(reset(), RED), "blockchain> ", reset())
   val-~stream_vt_cons(l, lines) = !lines
 in
    (cli_do(l); read_loop(lines))
