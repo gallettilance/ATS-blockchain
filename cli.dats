@@ -18,10 +18,6 @@ cli_stop(): void
 
 extern
 fun
-parse_args(s: string): list0(string)
-
-extern
-fun
 parse_fromto(list0(string)): (int, int)
 
 extern
@@ -82,21 +78,6 @@ cli_do(args) =
               print_chain(ch) 
             end
       | _ => ()
-
-implement
-parse_args(s) = let
-  val xs = string_explode(s)
-  
-  fun aux(xs: list0(char), res: list0(string), s: string): list0(string) =
-    case+ xs of
-    | list0_nil() => list0_reverse(cons0(s, res))
-    | list0_cons(x, xs) => 
-          if x = ' ' 
-          then aux(xs, cons0(s, res), "")
-          else aux(xs, res, s + string_implode(list0_sing(x)))
-in
-  aux(xs, nil0(), "")
-end
 
 (* ****** ****** *)
 
