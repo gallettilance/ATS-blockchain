@@ -36,7 +36,7 @@ file_write(e: block): void
 
 extern
 fun
-get_chain(): chain
+get_chain(from: int, to: int): chain
 
 extern
 fun
@@ -122,17 +122,24 @@ in
 end
 
 implement
-get_chain() = let
+get_chain(from, to) = let
   val f = fileref_open_opt("./blockchain.txt", file_mode_r)
   
-  fun aux(lines: stream_vt(string), res: chain): chain =
-      case+ !lines of
-      | ~stream_vt_nil() => list0_reverse(res)
-      | ~stream_vt_cons(l, lines) => 
-          if list0_length(string_explode(l)) > 135 //min length of block (check for empty lines)
-          then aux(lines, cons0(make_block(l), res))
-          else aux(lines, res)
-
+  fun aux(lines: stream_vt(string), res: chain, from: int, to: int): chain =
+      if to = 0 then (~lines; list0_reverse(res))
+      else
+      (      
+        case+ !lines of
+        | ~stream_vt_nil() => list0_reverse(res)
+        | ~stream_vt_cons(l, lines) => 
+          if from > 0 then aux(lines, res, from - 1, to - 1)
+          else 
+          (
+            if list0_length(string_explode(l)) > 135 //min length of block (check for empty lines)
+            then aux(lines, cons0(make_block(l), res), from, to - 1)
+            else aux(lines, res, from, to - 1)
+          )
+      )
 in
   case+ f of
   | ~None_vt() => nil0()
@@ -140,7 +147,7 @@ in
     let
       val theLines = streamize_fileref_line(inp)
     in
-      aux(theLines, nil0())
+      aux(theLines, nil0(), from, to)
     end
 end
 
