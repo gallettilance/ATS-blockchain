@@ -32,14 +32,15 @@ read_loop(lines: stream_vt(string)): void
 
 implement
 cli_start(lines) = let
-  val () = println!("Welcome to my blockchain in ATS!                                               ")
   val () = println!()
-  val () = println!("Commands:                                                                      ")
+  val () = println!(fg(reset(), YELLOW), "               Welcome to my blockchain in ATS!                                ", reset())
+  val () = println!("                                                                               ")
+  val () = println!(" Commands:                                                                     ")
   val () = println!("    mine <data>                               Mines a new block                ")
   val () = println!("    blockchain <from block> <to block>        View current state of blockchain ")
-  val () = println!()
-  val () = println!("ctrl-C to quit")
-  val () = println!()
+  val () = println!("                                                                               ")
+  val () = println!(" ctrl-C to quit                                                                ")
+  val () = println!("                                                                               ")
   
 in
   read_loop(lines)
@@ -47,7 +48,7 @@ end
 
 implement
 read_loop(lines) = let
-  val () = fprint!(stdout_ref, fg(reset(), RED), "blockchain> ", reset())
+  val () = fprint!(stdout_ref, fg(reset(), YELLOW), "blockchain", reset(), "> ")
   val-~stream_vt_cons(l, lines) = !lines
 in
    (cli_do(l); read_loop(lines))
@@ -158,7 +159,7 @@ case+ args of
     else 
     (
       case+ args of
-      | nil0() => (0, ~1)
+      | nil0() => (inta, ~1)
       | cons0(b, args) => let
           val intb = string2int(b)
         in
