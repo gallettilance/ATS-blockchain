@@ -12,9 +12,14 @@
 
 #include "./hash.dats"
 #include "./block.dats"
+
+(* ****** ****** *)
+
+#include "./string_parsers.dats"
 #include "./hash_ops.dats"
 #include "./print_block.dats"
 #include "./block_ops.dats"
+#include "./chain_ops.dats"
 #include "./cli.dats"
 
 (* ****** ****** *)

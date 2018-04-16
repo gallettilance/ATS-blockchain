@@ -18,10 +18,6 @@ cli_stop(): void
 
 extern
 fun
-parse_fromto(list0(string)): (int, int)
-
-extern
-fun
 read_loop(lines: stream_vt(string)): void
 
 (* ****** ****** *)
@@ -78,80 +74,6 @@ cli_do(args) =
               print_chain(ch) 
             end
       | _ => ()
-
-(* ****** ****** *)
-
-extern
-fun
-char2int(c: char): int
-
-extern
-fun
-string2int(s: string): int
-
-extern
-fun
-max(xs: list0(int)): int
-
-extern
-fun
-myfold(xs: list0(int), ys: list0(int)): list0(int)
-
-extern
-fun
-max_path(xss: list0(list0(int))): int
-
-(* ****** ****** *)
-
-implement
-char2int(c) =
-case+ c of
-| '0' => 0
-| '1' => 1
-| '2' => 2
-| '3' => 3
-| '4' => 4
-| '5' => 5
-| '6' => 6
-| '7' => 7
-| '8' => 8
-| '9' => 9
-| _ => ~1
-
-implement
-string2int(s) = let
-  val xs = string_explode(s)
-in
-  list0_foldleft<int><int>
-  (
-  list0_map<char><int>(xs, lam(x) => char2int(x))
-  , 0
-  , lam(res, x) => x + (res * 10)
-  )
-end
-
-implement
-parse_fromto(args) = 
-case+ args of
-| nil0() => (0, ~1)
-| cons0(a, args) => let
-    val inta = string2int(a)
-  in
-    if inta < ~1 
-    then parse_fromto(nil0())
-    else 
-    (
-      case+ args of
-      | nil0() => (inta, ~1)
-      | cons0(b, args) => let
-          val intb = string2int(b)
-        in
-          if intb < ~1 
-          then (inta, ~1)
-          else (inta, intb)
-        end
-    )
-  end
 
 (* ****** ****** *)
 
