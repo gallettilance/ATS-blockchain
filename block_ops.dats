@@ -164,15 +164,9 @@ in
     val-cons0(currh, xs) = xs
     val-cons0(tstamp, xs) = xs
   in
-    (
-      ( g0string2int_int(ind)
-      , g0string2int_int(nonce)
-      , data
-      , prevh
-      )
+    ((g0string2int_int(ind), g0string2int_int(nonce), data, prevh)
     , currh
-    , tstamp 
-    )
+    , tstamp )
   end
 end
 
@@ -189,7 +183,6 @@ let
   val nextblock = mine(nexthd)
 in
   file_write(nextblock)
-  //list0_append<block>(c, list0_sing(nextblock))
 end
 
 (* ****** ****** *)
