@@ -118,7 +118,7 @@ in
   
   print_line(out, row);
   fprint!(out, "|");
-  print_centered(out, "Nounce", col);
+  print_centered(out, "Nonce", col);
   fprint!(out, "|");
   print_centered(out, nounce, row - col - 3);
   fprint!(out, "|\n");
