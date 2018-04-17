@@ -11,6 +11,7 @@
 (* ****** ****** *)
 
 #include "./hash.dats"
+#include "./transaction.dats"
 #include "./block.dats"
 
 (* ****** ****** *)
@@ -19,6 +20,7 @@
 #include "./hash_ops.dats"
 #include "./print_block.dats"
 #include "./block_ops.dats"
+#include "./trans_ops.dats"
 #include "./chain_ops.dats"
 #include "./cli.dats"
 

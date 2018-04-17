@@ -20,6 +20,10 @@ extern
 fun
 string2int(s: string): int
 
+extern
+fun
+pop_last(xs: list0(string)): list0(string)
+
 (* ****** ****** *)
 
 extern
@@ -33,6 +37,18 @@ parse_args(s: string): list0(string)
 extern
 fun
 parse_fromto(list0(string)): (int, int)
+
+extern
+fun
+parse_csv(s: string): list0(string)
+
+extern
+fun
+cget_time(): string = "mac#cget_time"
+
+extern
+fun
+get_time(): string
 
 (* ****** ****** *)
 
@@ -92,6 +108,21 @@ in
   )
 end
 
+implement
+pop_last(xs) = let
+  fun aux(xs: list0(string), res: list0(string)): list0(string) =
+    case- xs of
+    | cons0(x, xs) =>
+      (
+        case+ xs of
+        | nil0() => list0_reverse(res)
+        | cons0(_, _) => aux(xs, cons0(x, res))
+      ) 
+in
+  aux(xs, nil0())
+end
+
+
 (* ****** ****** *)
 
 implement
@@ -139,6 +170,56 @@ parse_args(s) = let
           else aux(xs, res, s + string_implode(list0_sing(x)))
 in
   aux(xs, nil0(), "")
+end
+
+
+implement
+parse_csv(s) = let
+  fun aux(xs: list0(char), res: list0(string), s: string): list0(string) =
+    case+ xs of
+    | list0_nil() => list0_reverse(cons0(s, res))
+    | list0_cons(x, xs) => 
+            if x = ','
+            then aux(xs, cons0(s, res), "")
+            else aux(xs, res, s + string_implode(list0_sing(x)))
+in
+  pop_last(aux(string_explode(s), nil0(), ""))
+end
+
+%{
+#include <time.h>
+
+char *cget_time() {
+  time_t curtime;
+  time(&curtime);
+  char * s = ctime(&curtime);
+  return s;
+}
+%}
+
+
+implement
+get_time() = let
+  
+  fun parse(s: string): string = let
+    val xs = string_explode(s)
+  
+    fun aux(xs: list0(char), ys: list0(char)): string =
+      case+ xs of
+      | list0_nil() => string_make_rlist(g1ofg0(ys))
+      | list0_cons(x, xs) => 
+        if x = ' ' then aux(xs, cons0('-', ys))
+        else 
+        (
+          if x = '\n' then aux(xs, ys)
+          else aux(xs, cons0(x, ys))
+        )
+  in
+    aux(xs, nil0())
+  end
+
+in
+  parse(cget_time())
 end
 
 (* ****** ****** *)

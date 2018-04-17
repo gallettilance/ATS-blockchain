@@ -16,6 +16,10 @@ extern
 fun
 print_centered(out: FILEref, s: string, n: int): void
 
+extern
+fun
+print_transact(s: string, n: int, col: int): void
+
 (* ****** ****** *)
 
 extern
@@ -83,11 +87,7 @@ in
   fprint!(out, "|\n");
 
   print_line(out, row);
-  fprint!(out, "|");
-  print_centered(out, "Data", col);
-  fprint!(out, "|");
-  print_centered(out, data, row - col - 3);
-  fprint!(out, "|\n");  
+  print_transact(data, row - col - 3, col);
   
   print_line(out, row);
   fprint!(out, "|");
@@ -179,6 +179,54 @@ case+ ch of
 in
   ()
 end
+
+
+implement
+print_transact(s, n, col) = let
+  val xs = parse_csv(s)
+  val N = list0_length(xs)
+  val padup = (N - 1) / 2
+  val paddown = N - 1 - padup
+
+  fun aux(xs: list0(string), padup: int, paddown: int): void =
+    case+ xs of
+    | nil0() => ()
+    | cons0(x, xs) =>
+          if padup = 0 
+          then (
+            fprint!(stdout_ref, "|");
+            print_centered(stdout_ref, "Transactions", col);
+            fprint!(stdout_ref, "|");
+            print_centered(stdout_ref, x, n);
+            fprint!(stdout_ref, "|\n");
+            aux(xs, padup - 1, paddown - 1)
+          )
+          else
+          (
+            if padup < 0 
+            then 
+            (
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, "", col);
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, x, n);
+              fprint!(stdout_ref, "|\n");
+              aux(xs, padup - 1, paddown - 1)
+            )
+            else 
+            (
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, "", col);
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, x, n);
+              fprint!(stdout_ref, "|\n");
+              aux(xs, padup - 1, paddown)
+            )
+          )
+in
+  aux(xs, padup, paddown)
+end
+
 
 (* ****** ****** *)
 

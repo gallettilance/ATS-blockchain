@@ -1,2 +1,4 @@
 - jsonify blockchain.txt
+- add transaction functionality
 - p2p blockchain distribution
+- dependent types

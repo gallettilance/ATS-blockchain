@@ -29,7 +29,8 @@ cli_start(lines) = let
   val () = println!("                                                                               ")
   val () = println!(" Commands:                                                                     ")
   val () = println!("    exit                                      Exits the application            ")
-  val () = println!("    mine <data>                               Mines a new block                ")
+  val () = println!("    transact <data>                           Create a new transaction         ")
+  val () = println!("    mine                                      Mines a new block                ")
   val () = println!("    blockchain <from block> <to block>        View current state of blockchain ")
   val () = println!("                                                                               ")
   val () = println!("                                                                               ")
@@ -65,13 +66,14 @@ cli_do(args) =
   | list0_nil() => ()
   | list0_cons(a, args) =>
       case+ a of
-      | "mine" => let val a = list0_foldleft<string>(args, "", lam(res, x) => res + " " + x) in chain_append(get_chain(0, ~1), a) end
+      | "transact" => let val a = list0_foldleft<string>(args, "", lam(res, x) => res + " " + x) in transact(a) end
+      | "mine" => (chain_add(); println!("clearing transaction.txt"); clear_transact())
       | "blockchain" => 
             let 
               val (from, to) = parse_fromto(args)
-              val ch = get_chain(from, to) 
+              val ch = get_chain(from, to)
             in 
-              print_chain(ch) 
+              print_chain(ch)
             end
       | _ => ()
 

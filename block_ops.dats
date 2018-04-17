@@ -6,14 +6,6 @@
 
 extern
 fun
-cget_time(): string = "mac#cget_time"
-
-extern
-fun
-get_time(): string
-
-extern
-fun
 mine(hd: header): block
 
 extern
@@ -21,42 +13,6 @@ fun
 make_block(s: string): block
 
 (* ****** ****** *)
-
-%{
-#include <time.h>
-
-char *cget_time() {
-  time_t curtime;
-  time(&curtime);
-  char * s = ctime(&curtime);
-  return s;
-}
-%}
-
-implement
-get_time() = let
-  
-  fun parse(s: string): string = let
-    val xs = string_explode(s)
-  
-    fun aux(xs: list0(char), ys: list0(char)): string =
-      case+ xs of
-      | list0_nil() => string_make_rlist(g1ofg0(ys))
-      | list0_cons(x, xs) => 
-        if x = ' ' then aux(xs, cons0('-', ys))
-        else 
-        (
-          if x = '\n' then aux(xs, ys)
-          else aux(xs, cons0(x, ys))
-        )
-  in
-    aux(xs, nil0())
-  end
-
-in
-  parse(cget_time())
-end
-
 
 implement
 mine(hd) = let 
@@ -75,28 +31,40 @@ in
 end
 
 
-
 implement
 make_block(s) = let
+  
+  fun aux0(xs: list0(char), s: string): (list0(char), string) =
+    case- xs of
+    | list0_cons(x, xs) => 
+          if x = '}'
+          then let val-cons0(x, xs) = xs in (xs, s) end
+          else aux0(xs, s + string_implode(list0_sing(x)))
   
   fun aux(xs: list0(char), res: list0(string), s: string): list0(string) =
     case+ xs of
     | list0_nil() => list0_reverse(cons0(s, res))
     | list0_cons(x, xs) => 
-          if x = ',' 
-          then aux(xs, cons0(s, res), "")
-          else aux(xs, res, s + string_implode(list0_sing(x)))
+          if x = '\{'
+          then let val (xs, trns) = aux0(xs, "") in aux(xs, cons0(trns, res), "") end
+          else
+          (
+            if x = ','
+            then aux(xs, cons0(s, res), "")
+            else aux(xs, res, s + string_implode(list0_sing(x)))
+          )
+          
 in
   let
     val xs = aux(string_explode(s), nil0(), "")
     val-cons0(ind, xs) = xs
     val-cons0(nonce, xs) = xs
-    val-cons0(data, xs) = xs
+    val-cons0(trns, xs) = xs
     val-cons0(prevh, xs) = xs
     val-cons0(currh, xs) = xs
     val-cons0(tstamp, xs) = xs
   in
-    ((g0string2int_int(ind), g0string2int_int(nonce), data, prevh)
+    ((g0string2int_int(ind), g0string2int_int(nonce), trns, prevh)
     , currh
     , tstamp )
   end
