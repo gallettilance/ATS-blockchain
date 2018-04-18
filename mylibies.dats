@@ -15,6 +15,7 @@
 #include "./src/block.dats"
 #include "./src/string_parsers.dats"
 #include "./lambda/mylibies.dats"
+#include "./lambda/lisp_parser.dats"
 
 (* ****** ****** *)
 
