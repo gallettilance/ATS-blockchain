@@ -1,4 +1,4 @@
 - jsonify blockchain.txt
-- add transaction functionality
-- p2p blockchain distribution
-- dependent types
+- verify transaction (add last hash)
+- smart contracts with dummy language
+- p2p blockchain distribution w/ session types
