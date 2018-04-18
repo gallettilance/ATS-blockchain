@@ -7,6 +7,9 @@
 #include "share/atspre_staload.hats"
 #include "share/HATS/atspre_staload_libats_ML.hats"
 #include "./colorado/src/mylibies.hats"
+#include "./src/string_base.dats"
+#include "./lambda/mylibies.dats"
+#include "./lambda/lisp_parser.dats"
 
 (* ****** ****** *)
 
@@ -14,8 +17,6 @@
 #include "./src/transaction.dats"
 #include "./src/block.dats"
 #include "./src/string_parsers.dats"
-#include "./lambda/mylibies.dats"
-#include "./lambda/lisp_parser.dats"
 
 (* ****** ****** *)
 
