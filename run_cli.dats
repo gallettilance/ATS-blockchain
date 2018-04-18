@@ -17,4 +17,4 @@ where
 
 (* ****** ****** *)
 
-(* end of [test.dats] *)
+(* end of [run_cli.dats] *)

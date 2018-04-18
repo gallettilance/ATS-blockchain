@@ -3,7 +3,11 @@
 // LG 2018-04-03
 //
 (* ****** ****** *)
-
+(*
+extern
+fun
+is_valid_transact(t: transaction): bool
+*)
 extern
 fun
 transact(t: transaction): void

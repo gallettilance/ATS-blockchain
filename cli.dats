@@ -28,10 +28,11 @@ cli_start(lines) = let
   val () = println!(fg(reset(), YELLOW), "               Welcome to my blockchain in ATS!                                ", reset())
   val () = println!("                                                                               ")
   val () = println!(" Commands:                                                                     ")
-  val () = println!("    exit                                      Exits the application            ")
   val () = println!("    transact <from> <to> <ammount>            Create a new transaction         ")
+  val () = println!("    code <filename.txt>                       Create a new smart contract      ")
   val () = println!("    mine                                      Mines a new block                ")
   val () = println!("    blockchain <from block> <to block>        View current state of blockchain ")
+  val () = println!("    exit                                      Exits the application            ")
   val () = println!("                                                                               ")
   val () = println!("                                                                               ")
   
@@ -66,8 +67,26 @@ cli_do(args) =
   | list0_nil() => ()
   | list0_cons(a, args) =>
       case+ a of
-      | "code" => (* parse code for smart contract *) ()
-      | "transact" => let val trns = parse_args_transact(args) in transact(trns) end
+      | "code" => 
+        (
+          case+ args of 
+          | nil0() => ()
+          | cons0(f, args) => step_one(interp(parse_lisp(f)))
+        )
+      | "transact" => 
+        (
+          case+ args of
+          | nil0() => ()
+          | cons0(a, args) =>
+               case+ args of
+               | nil0() => ()
+               | cons0(b, args) => 
+                     case+ args of
+                     | nil0() => ()
+                     | cons0(c, args) => 
+                        let val trns = (a, b, string2int(c)) 
+                        in transact(trns) end
+        )
       | "mine" => (chain_add(); clear_transact())
       | "blockchain" => 
             let 
