@@ -134,6 +134,11 @@ case- opr of
     case- vs of
     | VALint(i1)::VALint(i2)::nil() => VALint(i1*i2)
   )
+| "%" =>
+  (
+    case- vs of
+    | VALint(i1)::VALint(i2)::nil() => VALint(i1%i2)
+  )
 | "/" =>
   (
     case- vs of

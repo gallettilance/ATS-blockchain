@@ -61,7 +61,7 @@ case+ t0 of
   fprint!(out, "(TMapp ", t1, " ", t2, ")")
 //
 | TMopr(opr, ts) =>
-  fprint!(out, "(TMopr ", opr, " ", ts)
+  fprint!(out, "(TMopr ", opr, " ", ts, ")")
 //
 | TMfix(f, x, t) =>
   fprint!(out, "(TMfix ", f, " ", x, " ", t, ")")
