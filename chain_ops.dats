@@ -6,11 +6,7 @@
 
 extern
 fun
-chain_init(s: string): void
-
-extern
-fun
-file_write_block(e: block): void
+chain_init(d: list0(transaction)): void
 
 extern
 fun
@@ -23,23 +19,11 @@ chain_add(): void
 (* ****** ****** *)
 
 implement
-chain_init(s) = let
-  val myblockstr = "0,0,{"+ s + "}," + hash0() + ",," + get_time()
-  val myblock = make_block(myblockstr)
-  val (head, _, _) = myblock
+chain_init(d) = let
+  val head = (0, 0, d, hash0())
   val block0 = mine(head)
 in
   file_write_block(block0)
-end
-
-
-implement
-file_write_block(e) = let
-  val out = fileref_open_exn("./blockchain.txt", file_mode_a)
-  val () = fprint_string(out, int2str(e.0.0) + "," + int2str(e.0.1) + ",{" + e.0.2 + "}," + e.0.3 + "," + e.1 + "," + e.2 + " \n")
-  val () = fileref_close(out)
-in
-  ()
 end
 
 
@@ -50,7 +34,7 @@ get_chain(from, to) = let
   fun aux(lines: stream_vt(string), res: chain, from: int, to: int): chain =
       if to = 0 then (~lines; list0_reverse(res))
       else
-      (      
+      (
         case+ !lines of
         | ~stream_vt_nil() => list0_reverse(res)
         | ~stream_vt_cons(l, lines) => 
@@ -58,7 +42,7 @@ get_chain(from, to) = let
           else 
           (
               if list0_length(string_explode(l)) > 135 //min length of block (check for empty lines)
-              then aux(lines, cons0(make_block(l), res), from, to - 1)
+              then aux(lines, cons0(decode_block(l), res), from, to - 1)
               else aux(lines, res, from, to - 1)
           )
       )
@@ -80,20 +64,18 @@ chain_add() = let
   val c = get_chain(0, ~1)
 in
   case+ c of
-  | nil0() => chain_init(get_transact())
+  | nil0() => chain_init(get_data())
   | cons0(_, _) =>
       let
-        val trns = get_transact()
+        val trns = get_data()
         
         val-cons0(b0, c0) = list0_reverse(c)
         val (hd, currh, tstamp) = b0
         val (ind, _, _, _) = hd
         
-        val myblockstr = int2str(ind + 1) + ",0,{" + trns + "}," + currh + "," + "," + get_time()
-        val myblock = make_block(myblockstr)
+        val head = (ind + 1, 0, trns, currh)
+        val nextblock = mine(head)
         
-        val (hd, _, _) = myblock
-        val nextblock = mine(hd)
       in
         file_write_block(nextblock)
       end

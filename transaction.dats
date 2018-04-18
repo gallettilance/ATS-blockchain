@@ -4,7 +4,8 @@
 //
 (* ****** ****** *)
 
-typedef transaction = string
+typedef transaction = (string, string, int)
+typedef data = list0(transaction)
 
 (* ****** ****** *)
 

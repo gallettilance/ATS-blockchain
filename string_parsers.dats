@@ -22,13 +22,10 @@ string2int(s: string): int
 
 extern
 fun
-pop_last(xs: list0(string)): list0(string)
+{a:t@ype}
+pop_last(xs: list0(a)): list0(a)
 
 (* ****** ****** *)
-
-extern
-fun
-stringize(hd: header): string
 
 extern
 fun
@@ -36,11 +33,17 @@ parse_args(s: string): list0(string)
 
 extern
 fun
-parse_fromto(list0(string)): (int, int)
+parse_args_blockchain(list0(string)): (int, int)
+
+extern
+fun
+parse_args_transact(list0(string)): (string, string, int)
 
 extern
 fun
 parse_csv(s: string): list0(string)
+
+(* ****** ****** *)
 
 extern
 fun
@@ -109,8 +112,11 @@ in
 end
 
 implement
+{a}
 pop_last(xs) = let
-  fun aux(xs: list0(string), res: list0(string)): list0(string) =
+  fun 
+  {a:t@ype}
+  aux(xs: list0(a), res: list0(a)): list0(a) =
     case- xs of
     | cons0(x, xs) =>
       (
@@ -126,23 +132,14 @@ end
 (* ****** ****** *)
 
 implement
-stringize(hd) = let
-  val s = int2str(hd.0) + int2str(hd.1) 
-  val s = s + hd.2 
-  val s = s + hd.3
-in
-  s
-end
-
-implement
-parse_fromto(args) = 
+parse_args_blockchain(args) = 
 case+ args of
 | nil0() => (0, ~1)
 | cons0(a, args) => let
     val inta = string2int(a)
   in
     if inta < ~1 
-    then parse_fromto(nil0())
+    then parse_args_blockchain(nil0())
     else 
     (
       case+ args of
@@ -156,6 +153,17 @@ case+ args of
         end
     )
   end
+
+
+implement
+parse_args_transact(args) = 
+case- args of
+| cons0(a, args) => 
+      case- args of
+      | cons0(b, args) => 
+            case- args of
+            | cons0(c, args) => (a, b, string2int(c))
+
 
 implement
 parse_args(s) = let
@@ -183,8 +191,10 @@ parse_csv(s) = let
             then aux(xs, cons0(s, res), "")
             else aux(xs, res, s + string_implode(list0_sing(x)))
 in
-  pop_last(aux(string_explode(s), nil0(), ""))
+  aux(string_explode(s), nil0(), "")
 end
+
+(* ****** ****** *)
 
 %{
 #include <time.h>

@@ -4,7 +4,7 @@
 //
 (* ****** ****** *)
 
-typedef header = ( (* index *) int, (* nounce *) int, (* data *) transaction, (* prevhash *) hash)
+typedef header = ( (* index *) int, (* nounce *) int, (* data *) list0(transaction), (* prevhash *) hash)
 typedef block = ( header, (* currhash *) hash, (* timestamp *) string)
 typedef chain = list0(block)
 
