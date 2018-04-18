@@ -71,7 +71,7 @@ cli_do(args) =
         (
           case+ args of 
           | nil0() => ()
-          | cons0(f, args) => step_one(interp(parse_lisp(f)))
+          | cons0(f, args) => file_write_code(interp(parse_lisp(f)))
         )
       | "transact" => 
         (
