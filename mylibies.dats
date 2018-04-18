@@ -11,20 +11,20 @@
 
 (* ****** ****** *)
 
-#include "./hash.dats"
-#include "./transaction.dats"
-#include "./block.dats"
+#include "./src/hash.dats"
+#include "./src/transaction.dats"
+#include "./src/block.dats"
 
 (* ****** ****** *)
 
-#include "./string_parsers.dats"
-#include "./encoders.dats"
-#include "./hash_ops.dats"
-#include "./trans_ops.dats"
-#include "./print_block.dats"
-#include "./block_ops.dats"
-#include "./chain_ops.dats"
-#include "./cli.dats"
+#include "./src/string_parsers.dats"
+#include "./src/encoders.dats"
+#include "./src/hash_ops.dats"
+#include "./src/trans_ops.dats"
+#include "./src/print_block.dats"
+#include "./src/block_ops.dats"
+#include "./src/chain_ops.dats"
+#include "./src/cli.dats"
 
 (* ****** ****** *)
 
