@@ -49,3 +49,6 @@ The language is based on lambda calculus. It is discouraged to write directly in
 - [ ] enhance lambda lang to be not lisp-like
 - [ ] enhance lambda lang to be typed
 
+------------
+
+If you liked this and want to buy me coffee, feel free to donate BTC at 3QRRJu7ZHpegrBUMPmJw4pvcexH7qjvdyn or ETH at 0x13792d38f5E89bc0dE64Ccb9005A86B3574CB3f5. Thanks!
