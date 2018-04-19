@@ -87,15 +87,7 @@ get_args(xs) = let
   fun aux(xs: stream_vt(string), cnt: int, arg: list0(string), res: list0(list0(string))): list0(list0(string)) =
     case- !xs of
     | ~stream_vt_nil() => list0_reverse(res)
-    | ~stream_vt_cons(x, xs1) => let
-          val () = println!(" *** *** ")
-          val () = println!("arg = ", list0_reverse(arg))
-          val () = println!("res = ", list0_reverse(res))
-          val () = println!("len(res) = ", list0_length(res))
-          val () = println!("x = ", x)
-          val () = println!("cnt = ", cnt)
-          val () = println!(" *** *** ")
-        in
+    | ~stream_vt_cons(x, xs1) => 
           ifcase
           | x = "(" orelse x = " (" =>  
                     if cnt = 0 
@@ -113,7 +105,7 @@ get_args(xs) = let
                       in 
                         if a = "(" 
                         then aux(xs1, 1, arg, res) 
-                        else aux(xs1, cnt, nil0(), cons0(list0_reverse(arg), res)) 
+                        else aux(xs1, cnt, list0_sing(x), cons0(list0_reverse(arg), res)) 
                       end
                     ) 
           | cnt = 0 andalso list0_length(arg) > 1 => 
@@ -128,7 +120,7 @@ get_args(xs) = let
           | x = " "  => aux(xs1, cnt, arg, res)
           | x = ")" => aux(xs1, cnt - 1, cons0(x, arg), res)
           | _ => aux(xs1, cnt, cons0(x, arg), res)
-        end
+        
 in
   let 
     val-~stream_vt_cons(x, xs) = !xs
@@ -176,9 +168,9 @@ end
 implement
 parse_TMtup(xs) = let
   val args = get_args(xs)
-  val xs = args[0] :list0(string)
+  val-cons0(xs, args) = args
   val () = assertloc(list0_length(xs) > 0)
-  val ys = args[1] :list0(string)
+  val-cons0(ys, _) = args
   val () = assertloc(list0_length(ys) > 0)
   val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
   val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
@@ -191,8 +183,10 @@ end
 implement
 parse_TMproj(xs) = let
   val args = get_args(xs)
-  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[0])))
-  val-cons0(s, _) = args[1]
+  val-cons0(xs, args) = args
+  val-cons0(ys, _) = args
+  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
+  val-cons0(s, _) = ys
 in
   (t0, string2int(s))
 end
@@ -209,9 +203,11 @@ end
 implement
 parse_TMlam(xs) = let
   val args = get_args(xs)
-  val () = assertloc(list0_length(args[1]) > 0)
-  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[1])))
-  val-cons0(s, _) = args[0]
+  val-cons0(xs, args) = args
+  val-cons0(ys, _) = args
+  val () = assertloc(list0_length(ys) > 0)
+  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
+  val-cons0(s, _) = xs
 in
   (s, t1)
 end
@@ -220,11 +216,9 @@ end
 implement
 parse_TMapp(xs) = let
   val args = get_args(xs)
-  val xs = args[0]
-  val ys = args[1]
-  val () = println!("xs = ", xs)
+  val-cons0(xs, args) = args
+  val-cons0(ys, _) = args
   val () = assertloc(list0_length(xs) > 0)
-  val () = println!("ys = ", ys)
   val () = assertloc(list0_length(ys) > 0)
   val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
   val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
@@ -236,10 +230,13 @@ end
 implement
 parse_TMfix(xs) = let
   val args = get_args(xs)
-  val () = assertloc(list0_length(args[2]) > 0)
-  val-Some(t2) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[2])))
-  val-cons0(s0, _) = args[0]
-  val-cons0(s1, _) = args[1]
+  val-cons0(xs, args) = args
+  val-cons0(ys,args) = args
+  val-cons0(zs, _) = args
+  val () = assertloc(list0_length(zs) > 0)
+  val-Some(t2) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
+  val-cons0(s0, _) = xs
+  val-cons0(s1, _) = ys
 in
   (s0, s1, t2)
 end
@@ -248,16 +245,16 @@ end
 implement
 parse_TMopr(xs) = let
   val args = get_args(xs)
-  val-cons0(s, _) = args[0]
-  val () = println!("s = ", s)
-  val xs = args[1]
-  val () = println!("xs = ", xs)
-  val () = assertloc(list0_length(xs) > 0)
-  val ys = args[2]
-  val () = println!("ys = ", ys)
+  val () = println!("TMopr args = ")
+  val () = (args).foreach()(lam(a) => (fprint!(stdout_ref, "["); fprint!(stdout_ref, a); fprint!(stdout_ref, "]")))
+  val-cons0(xs, args) = args
+  val-cons0(ys,args) = args
+  val-cons0(zs, _) = args
+  val-cons0(s, _) = xs
   val () = assertloc(list0_length(ys) > 0)
-  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
-  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
+  val () = assertloc(list0_length(zs) > 0)
+  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
+  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
 in
   (s, list0_tuple(t0, t1))
 end
@@ -266,12 +263,15 @@ end
 implement
 parse_TMifnz(xs) = let
   val args = get_args(xs)
-  val () = assertloc(list0_length(args[0]) > 0)
-  val () = assertloc(list0_length(args[1]) > 0)
-  val () = assertloc(list0_length(args[2]) > 0)
-  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[0])))
-  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[1])))
-  val-Some(t2) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[2])))
+  val-cons0(xs, args) = args
+  val-cons0(ys,args) = args
+  val-cons0(zs, _) = args
+  val () = assertloc(list0_length(xs) > 0)
+  val () = assertloc(list0_length(ys) > 0)
+  val () = assertloc(list0_length(zs) > 0)
+  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
+  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
+  val-Some(t2) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
 in
   (t0, t1, t2)
 end
@@ -280,10 +280,12 @@ end
 implement
 parse_TMseq(xs) = let
   val args = get_args(xs)
-  val () = assertloc(list0_length(args[0]) > 0)
-  val () = assertloc(list0_length(args[1]) > 0)
-  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[0])))
-  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(args[1])))
+  val-cons0(xs, args) = args
+  val-cons0(ys,_) = args
+  val () = assertloc(list0_length(xs) > 0)
+  val () = assertloc(list0_length(ys) > 0)
+  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
+  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
 in
   (t0, t1)
 end
@@ -318,7 +320,7 @@ end
 implement
 parse_tokens(xs) = 
   case+ !xs of
-  | ~stream_vt_nil() => (println!("hello from empty"); None())
+  | ~stream_vt_nil() => None()
   | ~stream_vt_cons(x, xs) => 
       case+ x of
       | "TMint"  =>  Some(TMint(parse_TMint(xs)))

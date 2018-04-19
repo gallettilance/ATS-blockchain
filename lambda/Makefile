@@ -24,7 +24,7 @@ numprime:: regress
 numprime:: test_dats; ./$< num_prime.txt
 
 queen:: regress
-queen:: test_dats; ./$< queen.txt
+queen:: test_dats; ./$< queens.txt
 
 ######
 
