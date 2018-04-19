@@ -114,7 +114,7 @@ end
 implement
 decode_contract(s) = let
   val xs = parse_csv(s)
-  val () = println!("xs = ", xs)
+  //val () = println!("xs = ", xs)
   val-cons0(id, xs) = xs
   val-cons0(v, _) = xs
 in

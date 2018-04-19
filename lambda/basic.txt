@@ -1,1 +1,1 @@
-(TMifnz (TMopr >= (TMopr * (TMint 5) (TMint 7)) (TMint 1)) (TMstr success) (TMstr failure))
+(TMproj (TMtup (TMint 0) (TMint 1)) 1)

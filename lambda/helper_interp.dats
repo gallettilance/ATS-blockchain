@@ -5,13 +5,6 @@
 (* ****** ****** *)
 
 fun
-sub_term_int
-(t1: term, i2: int): term =
-TMopr
-( "-"
-, list0_tuple(t1, TMint(i2)))
-
-fun
 sub_term_term
 (t1: term, i2: term): term =
 TMopr
@@ -73,7 +66,6 @@ abs_term
 (t1: term): term =
 TMopr("abs", cons0(t1, nil0()))
 
-overload - with sub_term_int
 overload - with sub_term_term
 overload + with add_term_term
 overload * with mul_term_term

@@ -73,7 +73,9 @@ get_args(xs) = let
   fun aux(xs: stream_vt(string), cnt: int, arg: list0(string), res: list0(list0(string))): list0(list0(string)) =
     case- !xs of
     | ~stream_vt_nil() => list0_reverse(res)
-    | ~stream_vt_cons(x, xs1) => 
+    | ~stream_vt_cons(x, xs1) => //let
+       //   val () = println!("len(res) = ", list0_length(res))
+       // in
           ifcase
           | x = "(" orelse x = " (" =>  
                     if cnt = 0 
@@ -106,7 +108,7 @@ get_args(xs) = let
           | x = " "  => aux(xs1, cnt, arg, res)
           | x = ")" => aux(xs1, cnt - 1, cons0(x, arg), res)
           | _ => aux(xs1, cnt, cons0(x, arg), res)
-        
+       // end        
 in
   let 
     val-~stream_vt_cons(x, xs) = !xs
