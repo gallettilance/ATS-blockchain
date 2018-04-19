@@ -14,7 +14,7 @@
 
 implement
 main0(argc, argv) = let
-  val myfile = (if (argc >= 2) then argv[1] else "isprime.txt"): string
+  val myfile = (if (argc >= 2) then argv[1] else "basic.txt"): string
   val out0 = fileref_open_exn("output.txt", file_mode_a)
 in
   fprint!(out0, interp(parse_lisp(myfile)))

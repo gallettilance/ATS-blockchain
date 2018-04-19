@@ -15,6 +15,8 @@ regress:: queens_dats; ./$<
 regress:: prime_dats; ./$<
 compile:: all regress clean
 
+basic:: test_dats; ./$<
+
 isprime:: regress
 isprime:: test_dats; ./$< isprime.txt
 

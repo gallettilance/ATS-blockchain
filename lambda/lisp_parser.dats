@@ -86,15 +86,49 @@ implement
 get_args(xs) = let
   fun aux(xs: stream_vt(string), cnt: int, arg: list0(string), res: list0(list0(string))): list0(list0(string)) =
     case- !xs of
-    | ~stream_vt_nil() => list0_reverse(cons0(list0_reverse(arg), res))
-    | ~stream_vt_cons(x, xs1) => 
+    | ~stream_vt_nil() => list0_reverse(res)
+    | ~stream_vt_cons(x, xs1) => let
+          val () = println!(" *** *** ")
+          val () = println!("arg = ", list0_reverse(arg))
+          val () = println!("res = ", list0_reverse(res))
+          val () = println!("len(res) = ", list0_length(res))
+          val () = println!("x = ", x)
+          val () = println!("cnt = ", cnt)
+          val () = println!(" *** *** ")
+        in
           ifcase
-          | x = "(" orelse x = " (" =>  if cnt = 0 then aux(xs1, 1, list0_sing(x), cons0(list0_reverse(arg), res)) else aux(xs1, cnt + 1, cons0(x, arg), res)
-          | cnt = 0 andalso list0_length(arg) > 1 => let val ys = $ldelay( stream_vt_cons(x, xs1), ~xs1) in aux(ys, cnt, nil0(), cons0(list0_reverse(arg), res)) end
-          | x = "" orelse x = " " => aux(xs1, cnt, arg, res)
+          | x = "(" orelse x = " (" =>  
+                    if cnt = 0 
+                    then 
+                    (
+                      if list0_length(arg) > 0
+                      then aux(xs1, 1, list0_sing(x), cons0(list0_reverse(arg), res))
+                      else aux(xs1, 1, list0_sing(x), res)
+                    )
+                    else aux(xs1, cnt + 1, cons0(x, arg), res)
+          | cnt = 0 andalso list0_length(arg) = 1 =>
+                    ( 
+                      let 
+                        val-cons0(a, _) = arg 
+                      in 
+                        if a = "(" 
+                        then aux(xs1, 1, arg, res) 
+                        else aux(xs1, cnt, nil0(), cons0(list0_reverse(arg), res)) 
+                      end
+                    ) 
+          | cnt = 0 andalso list0_length(arg) > 1 => 
+                    (
+                      let 
+                        val ys = $ldelay( stream_vt_cons(x, xs1), ~xs1) 
+                      in 
+                        aux(ys, cnt, nil0(), cons0(list0_reverse(arg), res)) 
+                      end
+                    )
+          | x = ""  => aux(xs1, cnt, arg, res)
+          | x = " "  => aux(xs1, cnt, arg, res)
           | x = ")" => aux(xs1, cnt - 1, cons0(x, arg), res)
           | _ => aux(xs1, cnt, cons0(x, arg), res)
-
+        end
 in
   let 
     val-~stream_vt_cons(x, xs) = !xs
@@ -187,11 +221,11 @@ implement
 parse_TMapp(xs) = let
   val args = get_args(xs)
   val xs = args[0]
-  val () = assertloc(list0_length(xs) > 0)
   val ys = args[1]
-  val () = assertloc(list0_length(ys) > 0)
   val () = println!("xs = ", xs)
+  val () = assertloc(list0_length(xs) > 0)
   val () = println!("ys = ", ys)
+  val () = assertloc(list0_length(ys) > 0)
   val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
   val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
 in
@@ -214,13 +248,16 @@ end
 implement
 parse_TMopr(xs) = let
   val args = get_args(xs)
+  val-cons0(s, _) = args[0]
+  val () = println!("s = ", s)
   val xs = args[1]
+  val () = println!("xs = ", xs)
   val () = assertloc(list0_length(xs) > 0)
   val ys = args[2]
+  val () = println!("ys = ", ys)
   val () = assertloc(list0_length(ys) > 0)
   val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
   val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
-  val-cons0(s, _) = args[0]
 in
   (s, list0_tuple(t0, t1))
 end

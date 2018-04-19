@@ -1,0 +1,1 @@
+(TMopr + (TMopr + (TMint 1) (TMint 1)) (TMint 1))
