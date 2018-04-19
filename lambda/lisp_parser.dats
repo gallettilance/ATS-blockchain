@@ -162,7 +162,6 @@ parse_TMtup(xs) = let
   val () = assertloc(list0_length(ys) > 0)
   val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
   val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
-  val-cons0(s, _) = args[0]
 in
   list0_tuple(t0, t1)
 end
@@ -235,16 +234,22 @@ parse_TMopr(xs) = let
   val args = get_args(xs)
   //val () = println!("TMopr args = ")
   //val () = (args).foreach()(lam(a) => (fprint!(stdout_ref, "["); fprint!(stdout_ref, a); fprint!(stdout_ref, "]")))
+  //val () = println!()
   val-cons0(xs, args) = args
   val-cons0(ys,args) = args
-  val-cons0(zs, _) = args
-  val-cons0(s, _) = xs
   val () = assertloc(list0_length(ys) > 0)
-  val () = assertloc(list0_length(zs) > 0)
+  val-cons0(s, _) = xs
   val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
-  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
 in
-  (s, list0_tuple(t0, t1))
+  if s = "abs" orelse s = "println" orelse s = "print" then (s, list0_sing(t0))
+  else let
+    //val () = println!("args = ", args)
+    val-cons0(zs, _) = args
+    val () = assertloc(list0_length(zs) > 0)
+    val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
+  in
+    (s, list0_tuple(t0, t1))
+  end
 end
 
 
