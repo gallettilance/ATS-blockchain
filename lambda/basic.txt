@@ -1,1 +1,1 @@
-(TMifnz (TMopr <= (TMint 1) (TMint 2)) (TMint 0) (TMopr + (TMopr + (TMint 1) (TMint 1)) (TMint 1)))
+(TMifnz (TMopr >= (TMopr * (TMint 5) (TMint 7)) (TMint 1)) (TMstr success) (TMstr failure))

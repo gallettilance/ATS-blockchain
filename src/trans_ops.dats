@@ -32,8 +32,10 @@ file_write_transact(t: transaction): void
 
 %{
 void clear_transact() {
-  char filename[] = "transaction.txt";
-  int ret = remove(filename);
+  char filename0[] = "transaction.txt";
+  char filename1[] = "value.txt";
+  int res0 = remove(filename0);
+  int res1 = remove(filename1);
   return;
 }
 %}
