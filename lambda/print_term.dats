@@ -14,6 +14,10 @@ extern
 fun
 fprint_term(out: FILEref, t0: term): void
 
+extern
+fun
+myprint(out: FILEref, xs: list0(term)): void
+
 (* ****** ****** *)
 
 overload print with print_term
@@ -34,6 +38,16 @@ fprint_term(stderr_ref, t0)
 implement
 fprint_val<term> = fprint_term
 
+implement
+myprint(out, xs) = 
+case+ xs of
+| nil0() => ()
+| cons0(x, xs) =>
+  case+ xs of
+  | nil0() => (fprint!(out, x); myprint(out, xs))
+  | cons0(_, _) => (fprint!(out, x, " "); myprint(out, xs))
+    
+
 (* ****** ****** *)
 
 implement
@@ -48,7 +62,7 @@ case+ t0 of
   fprint!(out, "(TMstr ", s, ")")
 //
 | TMtup(xs) =>
-  fprint!(out, "(TMtup ", xs, ")")
+  (fprint!(out, "(TMtup "); myprint(out, xs); fprint!(out, ")"))
 //
 | TMvar(x) =>
   fprint!(out, "(TMvar ", x, ")")
@@ -56,12 +70,12 @@ case+ t0 of
 | TMproj(x, i) =>
   fprint!(out, "(TMproj ", x, " ", i, ")")
 | TMlam(x, t) =>
-  fprint!(out, "(TMlam", x, " ", t, ")")
+  fprint!(out, "(TMlam ", x, " ", t, ")")
 | TMapp(t1, t2) =>
   fprint!(out, "(TMapp ", t1, " ", t2, ")")
 //
 | TMopr(opr, ts) =>
-  fprint!(out, "(TMopr ", opr, " ", ts, ")")
+  (fprint!(out, "(TMopr ", opr, " "); myprint(out, ts); fprint!(out, ")"))
 //
 | TMfix(f, x, t) =>
   fprint!(out, "(TMfix ", f, " ", x, " ", t, ")")
