@@ -24,6 +24,14 @@ extern
 fun
 print_data(xs: list0(transaction), n: int, col: int): void
 
+extern
+fun
+print_centered_contract(out: FILEref, c: contract, n: int): void
+
+extern
+fun
+print_result(xs: result, n: int, col: int): void
+
 (* ****** ****** *)
 
 extern
@@ -63,8 +71,8 @@ fprint_block(out, b0) = let
   val block_num = "block #0" + int2str(head.0)
   val nounce = int2str(head.1)
   val data = head.2
-  
-  val prevh = head.3
+  val res = head.3
+  val prevh = head.4
   
   val col = 17
   val row = 70 + col
@@ -92,6 +100,9 @@ in
 
   print_line(out, row);
   print_data(data, row - col - 3, col);
+  
+  print_line(out, row);
+  print_result(res, row - col - 3, col);
   
   print_line(out, row);
   fprint!(out, "|");
@@ -240,6 +251,63 @@ in
   print_centered(out, from + " sent $" + int2str(amount) + " to " + to, n)
 end
 
+
+implement
+print_result(xs, n, col) = let
+  val N = list0_length(xs)
+  val padup = (N - 1) / 2
+  val paddown = N - 1 - padup
+
+  fun aux(xs: result, padup: int, paddown: int): void =
+    case+ xs of
+    | nil0() => ()
+    | cons0(x, xs) =>
+          if padup = 0 
+          then (
+            fprint!(stdout_ref, "|");
+            print_centered(stdout_ref, "Code Results", col);
+            fprint!(stdout_ref, "|");
+            print_centered_contract(stdout_ref, x, n);
+            fprint!(stdout_ref, "|\n");
+            aux(xs, padup - 1, paddown - 1)
+          )
+          else
+          (
+            if padup < 0 
+            then 
+            (
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, "", col);
+              fprint!(stdout_ref, "|");
+              print_centered_contract(stdout_ref, x, n);
+              fprint!(stdout_ref, "|\n");
+              aux(xs, padup - 1, paddown - 1)
+            )
+            else 
+            (
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, "", col);
+              fprint!(stdout_ref, "|");
+              print_centered_contract(stdout_ref, x, n);
+              fprint!(stdout_ref, "|\n");
+              aux(xs, padup - 1, paddown)
+            )
+          )
+in
+  aux(xs, padup, paddown)
+end
+
+
+implement
+print_centered_contract(out, c, n) = let
+  val id = c.0
+  val v = c.1
+in
+  print_centered(out, "id: "+ id +", result: " + v, n)
+end
+
+
+
 (* ****** ****** *)
 
-(* end of [print_block.dats] *)
+(* end of [print_ops.dats] *)

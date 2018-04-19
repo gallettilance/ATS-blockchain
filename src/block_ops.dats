@@ -24,9 +24,9 @@ mine(hd) = let
     in
       if valid_hash(currh) then (hd, currh, get_time())
       else let
-        val (ind, nonce, data, prevh) = hd
+        val (ind, nonce, data, res, prevh) = hd
       in
-        aux((ind, nonce + 1, data, prevh))
+        aux((ind, nonce + 1, data, res, prevh))
       end
     end
 in

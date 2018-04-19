@@ -66,21 +66,7 @@ extern
 fun
 get_args(xs: stream_vt(string)): list0(list0(string))
 
-extern
-fun
-file_write_code(v: value): void
-
 (* ****** ****** *)
-
-implement
-file_write_code(v) = let
-  val out = fileref_open_exn("./value.txt", file_mode_a)
-  val () = fprint!(out, v)
-  val () = fileref_close(out)
-in
-  ()
-end
-
 
 implement
 get_args(xs) = let
@@ -245,8 +231,8 @@ end
 implement
 parse_TMopr(xs) = let
   val args = get_args(xs)
-  val () = println!("TMopr args = ")
-  val () = (args).foreach()(lam(a) => (fprint!(stdout_ref, "["); fprint!(stdout_ref, a); fprint!(stdout_ref, "]")))
+  //val () = println!("TMopr args = ")
+  //val () = (args).foreach()(lam(a) => (fprint!(stdout_ref, "["); fprint!(stdout_ref, a); fprint!(stdout_ref, "]")))
   val-cons0(xs, args) = args
   val-cons0(ys,args) = args
   val-cons0(zs, _) = args

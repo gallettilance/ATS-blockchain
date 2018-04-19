@@ -6,7 +6,7 @@
 
 extern
 fun
-chain_init(d: list0(transaction)): void
+chain_init(d: data, r: result): void
 
 extern
 fun
@@ -19,8 +19,8 @@ chain_add(): void
 (* ****** ****** *)
 
 implement
-chain_init(d) = let
-  val head = (0, 0, d, hash0())
+chain_init(d, r) = let
+  val head = (0, 0, d, r, hash0())
   val block0 = mine(head)
 in
   file_write_block(block0)
@@ -64,16 +64,17 @@ chain_add() = let
   val c = get_chain(0, ~1)
 in
   case+ c of
-  | nil0() => chain_init(get_data())
+  | nil0() => chain_init(get_data(), get_result())
   | cons0(_, _) =>
       let
         val trns = get_data()
+        val res = get_result()
         
         val-cons0(b0, c0) = list0_reverse(c)
         val (hd, currh, tstamp) = b0
-        val (ind, _, _, _) = hd
+        val (ind, _, _, _, _) = hd
         
-        val head = (ind + 1, 0, trns, currh)
+        val head = (ind + 1, 0, trns, res, currh)
         val nextblock = mine(head)
         
       in
