@@ -73,9 +73,7 @@ get_args(xs) = let
   fun aux(xs: stream_vt(string), cnt: int, arg: list0(string), res: list0(list0(string))): list0(list0(string)) =
     case- !xs of
     | ~stream_vt_nil() => list0_reverse(res)
-    | ~stream_vt_cons(x, xs1) => //let
-       //   val () = println!("len(res) = ", list0_length(res))
-       // in
+    | ~stream_vt_cons(x, xs1) => 
           ifcase
           | x = "(" orelse x = " (" =>  
                     if cnt = 0 
@@ -108,7 +106,7 @@ get_args(xs) = let
           | x = " "  => aux(xs1, cnt, arg, res)
           | x = ")" => aux(xs1, cnt - 1, cons0(x, arg), res)
           | _ => aux(xs1, cnt, cons0(x, arg), res)
-       // end        
+
 in
   let 
     val-~stream_vt_cons(x, xs) = !xs
@@ -156,14 +154,13 @@ end
 implement
 parse_TMtup(xs) = let
   val args = get_args(xs)
-  val-cons0(xs, args) = args
-  val () = assertloc(list0_length(xs) > 0)
-  val-cons0(ys, _) = args
-  val () = assertloc(list0_length(ys) > 0)
-  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(xs)))
-  val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
 in
-  list0_tuple(t0, t1)
+  list0_map<list0(string)><term>
+  (
+    list0_filter(args, lam(a) => list0_length(a) > 0)
+    ,
+    lam(a) => let val-Some(t) = parse_tokens(streamize_list_elt<string>(g1ofg0(a))) in t end
+  )
 end
 
 
@@ -228,13 +225,10 @@ in
   (s0, s1, t2)
 end
 
-
+//TODO: make flexible like TMtup
 implement
 parse_TMopr(xs) = let
   val args = get_args(xs)
-  //val () = println!("TMopr args = ")
-  //val () = (args).foreach()(lam(a) => (fprint!(stdout_ref, "["); fprint!(stdout_ref, a); fprint!(stdout_ref, "]")))
-  //val () = println!()
   val-cons0(xs, args) = args
   val-cons0(ys,args) = args
   val () = assertloc(list0_length(ys) > 0)
@@ -243,7 +237,6 @@ parse_TMopr(xs) = let
 in
   if s = "abs" orelse s = "println" orelse s = "print" then (s, list0_sing(t0))
   else let
-    //val () = println!("args = ", args)
     val-cons0(zs, _) = args
     val () = assertloc(list0_length(zs) > 0)
     val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
