@@ -225,24 +225,23 @@ in
   (s0, s1, t2)
 end
 
-//TODO: make flexible like TMtup
+
 implement
 parse_TMopr(xs) = let
   val args = get_args(xs)
-  val-cons0(xs, args) = args
-  val-cons0(ys,args) = args
-  val () = assertloc(list0_length(ys) > 0)
-  val-cons0(s, _) = xs
-  val-Some(t0) = parse_tokens(streamize_list_elt<string>(g1ofg0(ys)))
+  val-cons0(s, args) = args
+  val-cons0(s, _) = s
 in
-  if s = "abs" orelse s = "println" orelse s = "print" then (s, list0_sing(t0))
-  else let
-    val-cons0(zs, _) = args
-    val () = assertloc(list0_length(zs) > 0)
-    val-Some(t1) = parse_tokens(streamize_list_elt<string>(g1ofg0(zs)))
-  in
-    (s, list0_tuple(t0, t1))
-  end
+  ( 
+  s
+  ,
+  list0_map<list0(string)><term>
+  (
+    list0_filter(args, lam(a) => list0_length(a) > 0)
+    ,
+    lam(a) => let val-Some(t) = parse_tokens(streamize_list_elt<string>(g1ofg0(a))) in t end
+  )
+  )
 end
 
 
