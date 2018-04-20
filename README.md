@@ -50,7 +50,7 @@ The language is based on lambda calculus. Here are a few examples in this langua
 
 **Operations**: 2 + 3 + 4 is defined as ```(TMopr + (TMint 2) (TMint 3) (TMint 4))```
 
-**Lambda Function**: \x.(x + x) can be defined as
+**Lambda Function**: <img src="https://latex.codecogs.com/svg.latex?\lambda&space;x.x&plus;x" title="\lambda x.x+x" /></a> can be defined as
 
 ```
 (TMlam x (TMopr + (TMvar x) (TMvar x)))
@@ -79,7 +79,13 @@ The language is based on lambda calculus. Here are a few examples in this langua
   )
   ```
 
-**Sequential operations**: ```ats (println!("hello, world!"); add(2, 3))``` can be encoded as
+**Sequential operations**: 
+
+```ats 
+let val () = println!("hello, world!") in add(2, 3) end
+``` 
+
+can be encoded as
 
   ```
     (TMseq
