@@ -6,7 +6,7 @@
 
 #include "share/atspre_staload.hats"
 #include "share/HATS/atspre_staload_libats_ML.hats"
-#include "./mylibies.dats"
+#include "./../mylibies.dats"
 
 (* ****** ****** *)
 
@@ -44,8 +44,8 @@ implement
 main0() = ()
 where
 {
-  val out0 = fileref_open_exn("./example/isprime.txt", file_mode_a)
-  val out1 = fileref_open_exn("./example/numprime.txt", file_mode_a)
+  val out0 = fileref_open_exn("./isprime.txt", file_mode_a)
+  val out1 = fileref_open_exn("./numprime.txt", file_mode_a)
   val () = fprint!(out0, TMapp(IsPrime, TMint(3)))
   val () = fprint!(out1, TMapp(NumberOfPrimes, TMint(100)))
 }

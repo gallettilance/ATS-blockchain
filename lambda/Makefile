@@ -7,39 +7,69 @@
 PATSCC=$(PATSHOME)/bin/patscc
 PATSOPT=$(PATSHOME)/bin/patsopt
 
+MAKE=make
+
 ######
 
-all:: queens_dats
-all:: prime_dats
-regress:: queens_dats; ./$<
-regress:: prime_dats; ./$<
-compile:: all regress clean
+compile:: \
+fibo
+fibo:: ; \
+$(MAKE) -C example -f Makefile fibo
 
-basic:: test_dats; ./$<
+compile:: \
+fact
+fact:: ; \
+$(MAKE) -C example -f Makefile fact
 
-isprime:: regress
-isprime:: test_dats; ./$< example/isprime.txt
+compile:: \
+isprime
+isprime:: ; \
+$(MAKE) -C example -f Makefile isprime
 
-numprime:: regress
-numprime:: test_dats; ./$< example/num_prime.txt
+compile:: \
+numprime
+numprime:: ; \
+$(MAKE) -C example -f Makefile numprime
 
-queen:: regress
-queen:: test_dats; ./$< example/queens.txt
+compile:: \
+queens
+queens:: ; \
+$(MAKE) -C example -f Makefile queens
+
+compile:: clean
+
+######
+
+all:: test_dats
+
+regress_basic:: test_dats; ./$<
+
+regress_fibo:: test_dats; ./$< example/fibo.txt
+
+regress_fact:: test_dats; ./$< example/fact.txt
+
+regress_isprime:: test_dats; ./$< example/isprime.txt
+
+regress_numprime:: test_dats; ./$< example/numprime.txt
+
+regress_queens:: test_dats; ./$< example/queens.txt
 
 ######
 
 clean:: ; rm -f *~
 clean:: ; rm -f *_dats.o
 clean:: ; rm -f *_dats.c
-clean:: ; rm -f queens_dats
-clean:: ; rm -f prime_dats
 clean:: ; rm -f test_dats
+clean:: \
+cleanex
+cleanex:: ; \
+$(MAKE) -C example -f Makefile clean
 
-cleanall:: clean
-cleanall:: ; rm -f example/queens.txt
-cleanall:: ; rm -f example/num_prime.txt
-cleanall:: ; rm -f example/isprime.txt
-cleanall:: ; rm -f example/output.txt
+
+cleanall:: \
+cleanallex
+cleanallex:: ; \
+$(MAKE) -C example -f Makefile cleanall
 
 ######
 
