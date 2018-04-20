@@ -71,6 +71,8 @@ cleanallex
 cleanallex:: ; \
 $(MAKE) -C example -f Makefile cleanall
 
+cleanall:: clean
+
 ######
 
 %_dats: %.dats; $(PATSCC) -D_GNU_SOURCE -DATS_MEMALLOC_LIBC -o $@ $<
