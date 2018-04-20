@@ -38,25 +38,33 @@ Please take a look at the [prime.dats](./lambda/prime.dats) file along with the 
 The language is based on lambda calculus. Here are a few examples in this language:
 
 
-**Integers**: 1 is represented as '''(TMint 1)''', 2 as '''(TMint 2)''' etc
+**Integers**: 1 is represented as ```(TMint 1)```, 2 as ```(TMint 2)``` etc
 
-**Bool**: True is '''(TMint 1)''' and False is '''(TMint 0)'''
+**Bool**: True is ```(TMint 1)``` and False is ```(TMint 0)```
 
-**String**: "hello, world!" is defined as '''(TMstr hello, world!)'''
+**String**: "hello, world!" is defined as ```(TMstr hello, world!)```
 
-**Variable**: a variable x is declared as '''(TMvar x)'''
+**Variable**: a variable x is declared as ```(TMvar x)```
 
-**Tuples**: a tuple (t0, t1, t2) for example is defined as '''(TMtup t0 t1 t2)'''
+**Tuples**: a tuple (t0, t1, t2) for example is defined as ```(TMtup t0 t1 t2)```
 
-**Operations**: 2 + 3 + 4 is defined as '''(TMopr + (TMint 2) (TMint 3) (TMint 4))'''
+**Operations**: 2 + 3 + 4 is defined as ```(TMopr + (TMint 2) (TMint 3) (TMint 4))```
 
-**Lambda Function**: \x.(x + x) can be defined as '''(TMlam x (TMopr + (TMvar x) (TMvar x)))'''
+**Lambda Function**: \x.(x + x) can be defined as
 
-**Function application**: applying the above lambda function to 1 can be done as such: '''(TMapp (TMlam x (TMopr + (TMvar x) (TMvar x))) (TMint 1))'''
+```
+(TMlam x (TMopr + (TMvar x) (TMvar x)))
+```
+
+**Function application**: applying the above lambda function to 1 can be done as such:
+
+```
+(TMapp (TMlam x (TMopr + (TMvar x) (TMvar x))) (TMint 1))
+```
 
 **Fixed Point (Recursive functions)**: the fibonacci function can be written as
 
-  '''
+  ```
   (TMfix f x
       (TMifnz (TMvar x)
 	  (TMifnz (TMopr - (TMvar x) (TMint 1))
@@ -69,16 +77,16 @@ The language is based on lambda calculus. Here are a few examples in this langua
 	  (TMint 0)
       )
   )
-  '''
+  ```
 
 **Sequential operations**: (println!("hello, world!"); add(2, 3)) can be encoded as
 
-  '''
+  ```
     (TMseq
       (TMopr println (TMstr hello, world!))
       (TMapp (TMapp (TMlam y (TMlam x (TMopr + (TMvar x) (TMvar y)))) (TMint 2)) (TMint 3))
     )	
-  '''
+  ```
   
 As you can see, this language is not fit for encoding complex functions - although it is possible because of turing completeness. It is hence discouraged to write directly in this language. If you choose to, please put your code in a .txt file - the relative path of which should be given to the "code" command of the CLI.
 
