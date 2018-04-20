@@ -79,7 +79,7 @@ The language is based on lambda calculus. Here are a few examples in this langua
   )
   ```
 
-**Sequential operations**: (println!("hello, world!"); add(2, 3)) can be encoded as
+**Sequential operations**: ```ats (println!("hello, world!"); add(2, 3))``` can be encoded as
 
   ```
     (TMseq
