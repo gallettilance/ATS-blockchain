@@ -2,7 +2,7 @@
 
 A blockchain CLI in ATS
 
-![example](tty.gif)
+![example](gif/gif1.gif)
 
 ## About
 
@@ -12,6 +12,7 @@ Although this is currently just a toy blockchain, a number of fundamental functi
 - appending a block to the blockchain
 - creating a transaction
 - creating a smart contract
+- executing a smart contract
 
 ## The CLI
 
@@ -93,7 +94,11 @@ can be encoded as
     )	
   ```
   
-As you can see, this language is not fit for encoding complex functions - although it is possible because of turing completeness. It is hence discouraged to write directly in this language. If you choose to, please put your code in a .txt file - the relative path of which should be given to the "code" command of the CLI.
+As you can see, this language is not fit for encoding complex functions - although it is possible because of turing completeness. It is hence discouraged to write directly in this language. If you choose to write code directly you can either
+
+- put your code in a .txt file - the relative path of which should be given to the "execute" command of the CLI.
+
+- write your code after the "code" command of the CLI.
 
 ## TODO
 
