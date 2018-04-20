@@ -31,7 +31,7 @@ I implemented a lisp-like language for this blockchain to create what are called
 
 #### ATS -> lambda
 
-Please take a look at the [prime.dats](./lambda/prime.dats) file along with the [helper_interp.dats](./lambda/helper_interp.dats) files for an example of writing code in ATS to generate lambda code and extend the lambda language.
+Please take a look at the [examples](./lambda/example) folder along with the [helper_interp.dats](./lambda/helper_interp.dats) file for an example of writing code in ATS to generate lambda code and extend the lambda language. You can use ```make compile``` to compile all examples into the lisp-like lambda language.
 
 #### lambda
 
