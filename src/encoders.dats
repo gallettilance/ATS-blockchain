@@ -28,6 +28,9 @@ extern
 fun
 encode_result(r: result): string
 
+extern
+fun
+encode_usercode(xs: list0(string)): string
 
 (* ****** ****** *)
 
@@ -95,6 +98,22 @@ encode_result(r) = let
     | cons0(cntr, r) => aux(r, res + encode_contract(cntr))
 in
   aux(r, "")
+end
+
+
+implement
+encode_usercode(xs) = let
+  fun aux(xs: list0(string), s: string): string =
+    case+ xs of
+    | nil0() => s
+    | cons0(x, xs) => 
+      (
+        case+ xs of
+        | nil0() => aux(xs, s + x)
+        | cons0(_, _) => aux(xs, s + x + " ")
+      )
+in
+  aux(xs, "")
 end
 
 

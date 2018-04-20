@@ -29,7 +29,8 @@ cli_start(lines) = let
   val () = println!("                                                                               ")
   val () = println!(" Commands:                                                                     ")
   val () = println!("    transact <from> <to> <ammount>            Create a new transaction         ")
-  val () = println!("    code <path/to/filename.txt>               Create a new smart contract      ")
+  val () = println!("    execute <lambda-lisp code>                Code a new smart contract        ")
+  val () = println!("    code <path/to/filename.txt>               Execute a smart contract         ")
   val () = println!("    mine                                      Mines a new block                ")
   val () = println!("    blockchain <from block> <to block>        View current state of blockchain ")
   val () = println!("    exit                                      Exits the application            ")
@@ -67,12 +68,20 @@ cli_do(args) =
   | list0_nil() => ()
   | list0_cons(a, args) =>
       case+ a of
-      | "code" => 
+      | "execute" => 
         (
           case+ args of 
           | nil0() => ()
           | cons0(f, args) => file_write_contract((f, val2str(interp(parse_lisp(f)))))
         )
+      | "code" => let
+              val f = "./temp" + get_time() + ".txt"
+              val out = fileref_open_exn(f, file_mode_a)
+              val () = fprint_string(out, encode_usercode(args))
+              val () = fileref_close(out)
+            in
+              file_write_contract((f, val2str(interp(parse_lisp(f)))))
+            end
       | "transact" => 
         (
           case+ args of
