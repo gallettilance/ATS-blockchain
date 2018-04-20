@@ -5,7 +5,7 @@
 (* ****** ****** *)
 
 datasort stype = psend of (vt@ype) | precv of (vt@ype) | pclose | pwait | pseq of (stype, stype)
-absvtype channel (stype)
+absvtype channel (int, stype)
 
 stadef :: = pseq
 

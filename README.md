@@ -27,19 +27,63 @@ Please follow the instructions in the CLI.
 
 ### Smart Contracts
 
-I implemented a lisp-like language for this blockchain to create what are called smart contracts. At a high level, these smart contracts are just code running on the blockchain so to speak. I provide the user with two ways of writing smart contracts. The first is by utilizing ATS, the other is by writing code directly in the lisp-like language. Both are currently very similar but building upon the lambda language in the ATS framework is possible before generating lambda code.
+I implemented a lisp-like language for this blockchain to create what are called smart contracts. At a high level, these smart contracts are just code running on the blockchain so to speak. I provide the user with two ways of writing smart contracts. The first is by utilizing ATS, the other is by writing code directly in the lisp-like language. Both are currently very similar but the former allows for extending the lambda language to allow for more succinct verbosity, in addition to which one can utilize the typechecker and compiler of ATS for static syntactic debugging. It is hence recommended to utilize ATS to generate this lambda lisp-like language.
 
 #### ATS -> lambda
 
-Please take a look at the [prime.dats](./lambda/prime.dats) file along with the [helper_interp.dats](./lambda/helper_interp.dats) files for an example of writing code in ATS to generate lambda code.
+Please take a look at the [prime.dats](./lambda/prime.dats) file along with the [helper_interp.dats](./lambda/helper_interp.dats) files for an example of writing code in ATS to generate lambda code and extend the lambda language.
 
 #### lambda
 
-The language is based on lambda calculus. It is discouraged to write directly in this language but if you do, the code should be put in a .txt file - the relative path of which should be given to the "code" command of the CLI.
+The language is based on lambda calculus. Here are a few examples in this language:
+
+
+**Integers**: 1 is represented as '''(TMint 1)''', 2 as '''(TMint 2)''' etc
+
+**Bool**: True is '''(TMint 1)''' and False is '''(TMint 0)'''
+
+**String**: "hello, world!" is defined as '''(TMstr hello, world!)'''
+
+**Variable**: a variable x is declared as '''(TMvar x)'''
+
+**Tuples**: a tuple (t0, t1, t2) for example is defined as '''(TMtup t0 t1 t2)'''
+
+**Operations**: 2 + 3 + 4 is defined as '''(TMopr + (TMint 2) (TMint 3) (TMint 4))'''
+
+**Lambda Function**: \x.(x + x) can be defined as '''(TMlam x (TMopr + (TMvar x) (TMvar x)))'''
+
+**Function application**: applying the above lambda function to 1 can be done as such: '''(TMapp (TMlam x (TMopr + (TMvar x) (TMvar x))) (TMint 1))'''
+
+**Fixed Point (Recursive functions)**: the fibonacci function can be written as
+
+  '''
+  (TMfix f x
+      (TMifnz (TMvar x)
+	  (TMifnz (TMopr - (TMvar x) (TMint 1))
+	      (TMopr +
+		  (TMapp f (TMopr - (TMvar x) (TMint 1)))
+		  (TMapp f (TMopr - (TMvar x) (TMint 2)))
+	      )
+	      (TMint 1)
+	  )
+	  (TMint 0)
+      )
+  )
+  '''
+
+**Sequential operations**: (println!("hello, world!"); add(2, 3)) can be encoded as
+
+  '''
+    (TMseq
+      (TMopr println (TMstr hello, world!))
+      (TMapp (TMapp (TMlam y (TMlam x (TMopr + (TMvar x) (TMvar y)))) (TMint 2)) (TMint 3))
+    )	
+  '''
+  
+As you can see, this language is not fit for encoding complex functions - although it is possible because of turing completeness. It is hence discouraged to write directly in this language. If you choose to, please put your code in a .txt file - the relative path of which should be given to the "code" command of the CLI.
 
 ## TODO
 
-- [ ] improve parser
 - [ ] jsonify blockchain.txt
 - [ ] refine using dependent types
 - [ ] coinbase

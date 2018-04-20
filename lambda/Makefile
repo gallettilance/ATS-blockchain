@@ -18,13 +18,13 @@ compile:: all regress clean
 basic:: test_dats; ./$<
 
 isprime:: regress
-isprime:: test_dats; ./$< isprime.txt
+isprime:: test_dats; ./$< example/isprime.txt
 
 numprime:: regress
-numprime:: test_dats; ./$< num_prime.txt
+numprime:: test_dats; ./$< example/num_prime.txt
 
 queen:: regress
-queen:: test_dats; ./$< queens.txt
+queen:: test_dats; ./$< example/queens.txt
 
 ######
 
@@ -36,10 +36,10 @@ clean:: ; rm -f prime_dats
 clean:: ; rm -f test_dats
 
 cleanall:: clean
-cleanall:: ; rm -f queens.txt
-cleanall:: ; rm -f num_prime.txt
-cleanall:: ; rm -f isprime.txt
-cleanall:: ; rm -f output.txt
+cleanall:: ; rm -f example/queens.txt
+cleanall:: ; rm -f example/num_prime.txt
+cleanall:: ; rm -f example/isprime.txt
+cleanall:: ; rm -f example/output.txt
 
 ######
 

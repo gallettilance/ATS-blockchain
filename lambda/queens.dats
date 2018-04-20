@@ -285,7 +285,7 @@ main0() = ()
 where
 {
 val board = TMtup(cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), nil0() )) )) )) )) )
-val out = fileref_open_exn("./queens.txt", file_mode_a)
+val out = fileref_open_exn("./example/queens.txt", file_mode_a)
 val () = fprint!(out, TMapp(search, TMtup(cons0(board, cons0(TMint(0), cons0(TMint(0), cons0(TMint(0), nil0()))))) ))
 }
 
