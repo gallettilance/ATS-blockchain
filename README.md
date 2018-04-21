@@ -21,17 +21,18 @@ Although this is currently just a toy blockchain, a number of fundamental functi
 
 ### Running the application
 
-If you wish to run a smart contract, please read below on how to create a smart contract. Otherwise, after installing [ATS](http://www.ats-lang.org/), simply run
+After installing [ATS](http://www.ats-lang.org/), simply run
 
 ```shell
+git clone https://github.com/ashalkhakov/colorado.git  
 make regress
 ```
 
-Please follow the instructions in the CLI.
+Please follow the instructions in the CLI. If you wish to run a smart contract, please read below on how to create a smart contract.
 
 ### Smart Contracts
 
-I implemented a lisp-like language for this blockchain to create what are called smart contracts. At a high level, these smart contracts are just code running on the blockchain so to speak. I provide the user with two ways of writing smart contracts. The first is by utilizing ATS, the other is by writing code directly in the lisp-like language. Both are currently very similar but the former allows for extending the lambda language to allow for more succinct verbosity, in addition to which one can utilize the typechecker and compiler of ATS for static syntactic debugging. It is hence recommended to utilize ATS to generate this lambda lisp-like language.
+I implemented a lisp-like language for this blockchain to create what are called smart contracts. At a high level, these smart contracts are just code running on the blockchain so to speak. I provide the user with two ways of writing smart contracts. The first is by utilizing ATS, the other is by writing code directly in the lisp-like language. Both are currently very similar but the former allows for extending the lambda language to allow for more succinct verbosity, in addition to which one can utilize the typechecker and compiler of ATS for static syntactic debugging. It is hence recommended to utilize ATS to generate this lambda lisp-like language. Should you wish to write the smart contract directly in the CLI, you may do so after the "code" command. 
 
 #### ATS -> lambda
 
