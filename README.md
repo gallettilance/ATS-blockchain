@@ -73,13 +73,12 @@ The language is based on lambda calculus. Here are a few examples in this langua
   (TMfix f x
   	 (TMifnz (TMvar x)
 	 	 (TMifnz (TMopr - (TMvar x) (TMint 1))
-		 	 (TMapp (TMvar f)
-			 	(TMopr +
-			 	       (TMopr - (TMvar x) (TMint 1))
-				       (TMapp (TMvar f) (TMopr - (TMvar x) (TMint 2)))
-				 ))
+		 	 (TMopr +
+			 (TMapp (TMvar f) (TMopr - (TMvar x) (TMint 1)))
+			 (TMapp (TMvar f) (TMopr - (TMvar x) (TMint 2)))
+			 )
 		 (TMint 1))
-	(TMint 0))
+	 (TMint 0))
   )
   ```
 
