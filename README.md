@@ -17,6 +17,8 @@ Although this is currently just a toy blockchain, a number of fundamental functi
 - creating a smart contract
 - executing a smart contract
 
+For more information, please read the following [article](https://beta.observablehq.com/@galletti94/functional-blockchain).
+
 ## The CLI
 
 ### Running the application
