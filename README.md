@@ -9,7 +9,7 @@ A blockchain CLI in ATS
 
 ## About
 
-Although this is currently just a toy blockchain, a number of fundamental functionalities - a refinement of which is underway - are currently supported. These include:
+A number of fundamental blockchain functionalities - a refinement of which is underway - are currently supported. These include:
 
 - mining a block
 - appending a block to the blockchain
