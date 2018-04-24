@@ -22,6 +22,29 @@ read_loop(lines: stream_vt(string)): void
 
 (* ****** ****** *)
 
+extern
+fun
+do_execute(args: list0(string)): void
+
+extern
+fun
+do_transact(args: list0(string)): void
+
+extern
+fun
+do_code(args: list0(string)): void
+
+extern
+fun
+do_mine(): void
+
+extern
+fun
+do_blockchain(args: list0(string)): void
+
+
+(* ****** ****** *)
+
 implement
 cli_start(lines) = let
   val () = println!()
@@ -68,43 +91,58 @@ cli_do(args) =
   | list0_nil() => ()
   | list0_cons(a, args) =>
       case+ a of
-      | "execute" => 
-        (
-          case+ args of 
-          | nil0() => ()
-          | cons0(f, args) => file_write_contract((f, val2str(interp(parse_lisp(f)))))
-        )
-      | "code" => let
-              val f = "./temp" + get_time() + ".txt"
-              val out = fileref_open_exn(f, file_mode_a)
-              val () = fprint_string(out, encode_usercode(args))
-              val () = fileref_close(out)
-            in
-              file_write_contract((f, val2str(interp(parse_lisp(f)))))
-            end
-      | "transact" => 
-        (
-          case+ args of
-          | nil0() => ()
-          | cons0(a, args) =>
-               case+ args of
-               | nil0() => ()
-               | cons0(b, args) => 
-                     case+ args of
-                     | nil0() => ()
-                     | cons0(c, args) => 
-                        let val trns = (a, b, string2int(c)) 
-                        in transact(trns) end
-        )
-      | "mine" => (chain_add(); clear_transact())
-      | "blockchain" => 
-            let 
-              val (from, to) = parse_args_blockchain(args)
-              val ch = get_chain(from, to)
-            in 
-              print_chain(ch)
-            end
+      | "execute" => do_execute(args)
+      | "code" => do_code(args)
+      | "transact" => do_transact(args)
+      | "mine" => do_mine()
+      | "blockchain" => do_blockchain(args)
       | _ => ()
+
+
+(* ****** ****** *)
+
+implement
+do_execute(args) =
+case+ args of 
+| nil0() => ()
+| cons0(f, args) => file_write_contract((f, val2str(interp(parse_lisp(f)))))
+
+
+implement
+do_code(args) = let
+  val f = "./temp" + get_time() + ".txt"
+  val out = fileref_open_exn(f, file_mode_a)
+  val () = fprint_string(out, encode_usercode(args))
+  val () = fileref_close(out)
+in
+  file_write_contract((f, val2str(interp(parse_lisp(f)))))
+end
+
+implement
+do_transact(args) = 
+case+ args of
+| nil0() => ()
+| cons0(a, args) =>
+   case+ args of
+   | nil0() => ()
+   | cons0(b, args) => 
+     case+ args of
+     | nil0() => ()
+     | cons0(c, args) => 
+        let val trns = (a, b, string2int(c)) 
+        in transact(trns) end
+
+implement
+do_mine() = (chain_add(); clear_transact())
+
+
+implement
+do_blockchain(args) = let 
+  val (from, to) = parse_args_blockchain(args)
+  val ch = get_chain(from, to)
+in 
+  print_chain(ch)
+end
 
 (* ****** ****** *)
 
