@@ -105,12 +105,12 @@ As you can see, this language is not fit for encoding complex functions - althou
 
 - write your code after the "code" command of the CLI.
 
-## TODO
+## TODO for next release
 
 - [ ] jsonify blockchain.txt
 - [ ] refine using dependent types
-- [ ] coinbase
-- [ ] validate transactions
+- [x] add coin system
+- [x] validate transactions
 - [ ] make blockchain distributed
 - [ ] enhance lambda lang to include transactions
 - [ ] enhance lambda lang to be not lisp-like
