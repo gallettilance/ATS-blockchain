@@ -1,1 +1,77 @@
-travis-ci/travis.yml
+os:
+  - osx
+  - linux
+env:
+  - CCATS2=GCC
+  - CCATS2=CLANG
+sudo: false
+addons:
+  apt:
+    packages:
+    - libgc-dev
+    - libgmp-dev
+    - libgtk-3-dev
+    - libev-dev
+    - libjson0-dev
+    - libjansson-dev
+before_install:
+  - date
+  - cd ${HOME}
+  # Setting-up
+  - export ATSHOME=${HOME}/ats-lang-anairiats-0.2.12
+  - export ATSHOMERELOC=ATS-0.2.12
+  # Install pkgs
+  - ${TRAVIS_BUILD_DIR}/travis-ci/installpkg.sh
+  # Download ATS1
+  - ${TRAVIS_BUILD_DIR}/travis-ci/ats1_setup.sh 0.2.12
+  - export PATSHOME=${HOME}/ATS-Postiats
+  - export PATSCONTRIB=${HOME}/ATS-Postiats-contrib
+  - export PATSHOMELOCS=./node_modules:./../../node_modules:./../../../node_modules
+  # Download ATS2
+  - git clone https://github.com/githwxi/ATS-Postiats.git ATS-Postiats
+  # Download ATS2-contrib
+  - git clone https://github.com/githwxi/ATS-Postiats-contrib.git ATS-Postiats-contrib
+  - export GCC=gcc
+  - export CLANG=clang
+  # if [ "$TRAVIS_OS_NAME" = "osx" ]; then export GCC=gcc-5; fi
+script:
+  - ${GCC} --version
+  - ${CLANG} --version
+  - eval CC=\${${CCATS2}}
+  # Building ATS1
+  - cd ${ATSHOME}
+  # ./configure&&make CC=${CC} all
+  - ./configure&&make CC=${CC} all_ngc
+  # Building ATS2
+  - cd ${PATSHOME}
+  - GCFLAG=-D_ATS_NGC
+  # GCFLAG=-D_ATS_GCATS
+  # GCFLAG=-D_ATS_GCBDW
+  - C3NSTRINTKND=intknd
+  # C3NSTRINTKND=gmpknd
+  - make C3NSTRINTKND=${C3NSTRINTKND} -f Makefile_devl CC=${CC} GCFLAG=${GCFLAG} all
+  - export PATH=${PATH}:${PATSHOME}/bin
+  # Trying-out release process
+  - cd ${TRAVIS_BUILD_DIR}
+  - make -C ${PATSHOME}/src CBOOT
+  - make -C ${PATSHOME}/src/CBOOT/prelude
+  - make -C ${PATSHOME}/src/CBOOT/libc
+  - make -C ${PATSHOME}/src/CBOOT/libats
+  - make -C ${PATSHOME}/doc/DISTRIB atspackaging
+  - make -C ${PATSHOME}/doc/DISTRIB atspacktarzvcf
+  - make -C ${PATSHOME}/doc/DISTRIB cleanall
+  # Building parsemit
+  - (cd ${PATSHOME}/contrib/CATS-parsemit && make all)
+  # Building atscc2js
+  - (cd ${PATSHOME}/contrib/CATS-atscc2js && make all && mv -f bin/atscc2js ${PATSHOME}/bin/.)
+  # Building atscc2py3
+  - (cd ${PATSHOME}/contrib/CATS-atscc2py3 && make all && mv -f bin/atscc2py3 ${PATSHOME}/bin/.)
+  # Building atscc2php
+  - (cd ${PATSHOME}/contrib/CATS-atscc2php && make all && mv -f bin/atscc2php ${PATSHOME}/bin/.)
+  # Building atscc2r34
+  - (cd ${PATSHOME}/contrib/CATS-atscc2r34 && make all && mv -f bin/atscc2r34 ${PATSHOME}/bin/.)
+  # Running regress test
+  - git clone https://github.com/ashalkhakov/colorado.git colorado
+  - make all
+after_script:
+  - date
