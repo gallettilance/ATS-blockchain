@@ -16,8 +16,8 @@ file_write_block(e: block): void
 
 implement
 mine(hd) = let 
-  //val (ind, nonce, trns, h) = hd
-  //val theValids = list0_filter(trns, lam(t) => is_valid_transact(t))
+  val (ind, nonce, trns, code, h) = hd
+  val theValids = list0_filter(trns, lam(t) => is_valid_transact(t))
   
   fun aux(hd: header): block = let
       val currh = sha256(encode_header(hd))
@@ -30,8 +30,7 @@ mine(hd) = let
       end
     end
 in
-  //aux((ind, nonce, theValids, h))
-  aux(hd)
+  aux((ind, nonce, theValids, code, h))
 end
 
 

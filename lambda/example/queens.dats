@@ -25,7 +25,7 @@ val args = TMvar("args")
 val print_dots = 
 TMfix("f", "t",
   TMifnz(t > TMint(0) ,
-    TMseq( TMopr("print", list0_tuple(TMstr(". "))), TMapp(f, t - TMint(1)) ), TMopr("print", list0_tuple(TMstr(""))) ))
+    TMseq( TMopr("print", list0_tuple(TMstr(". "))), TMapp(f, t - TMint(1)) ), TMopr("print", list0_sing(TMstr("")) )))
 
 val print_row =
 TMlam("t",
@@ -36,7 +36,7 @@ TMlam("t",
     ),
     TMseq(
       TMapp(print_dots, N - t - TMint(1)),
-      TMopr("println", list0_tuple(TMstr("")))
+      TMopr("println", list0_sing(TMstr("")) )
     )
   )
 )

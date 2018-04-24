@@ -36,12 +36,19 @@ do_code(args: list0(string)): void
 
 extern
 fun
-do_mine(): void
+do_mine(args: list0(string)): void
 
 extern
 fun
 do_blockchain(args: list0(string)): void
 
+extern
+fun
+do_define(args: list0(string)): void
+
+extern
+fun
+do_balance(args: list0(string)): void
 
 (* ****** ****** *)
 
@@ -51,12 +58,14 @@ cli_start(lines) = let
   val () = println!(fg(reset(), YELLOW), "               Welcome to my blockchain in ATS!                                ", reset())
   val () = println!("                                                                               ")
   val () = println!(" Commands:                                                                     ")
-  val () = println!("    transact <from> <to> <ammount>            Create a new transaction         ")
-  val () = println!("    execute <path/to/filename.txt>            Execute a new smart contract     ")
+  val () = println!("    blockchain <from block> <to block>        View current state of blockchain ")  
+  val () = println!("    balance <miner>                           Get balance of miner             ")
   val () = println!("    code <lambda-lisp code>                   Code a smart contract            ")
-  val () = println!("    mine                                      Mines a new block                ")
-  val () = println!("    blockchain <from block> <to block>        View current state of blockchain ")
+  val () = println!("    define <miner>                            Defines a new miner              ")
+  val () = println!("    execute <path/to/filename.txt>            Execute a new smart contract     ")
   val () = println!("    exit                                      Exits the application            ")
+  val () = println!("    mine <miner>                              Specified miner mines a new block")
+  val () = println!("    transact <from> <to> <ammount>            Create a new transaction         ")
   val () = println!("                                                                               ")
   val () = println!("                                                                               ")
   
@@ -91,20 +100,31 @@ cli_do(args) =
   | list0_nil() => ()
   | list0_cons(a, args) =>
       case+ a of
-      | "execute" => do_execute(args)
-      | "code" => do_code(args)
-      | "transact" => do_transact(args)
-      | "mine" => do_mine()
+      | "balance" => do_balance(args)
       | "blockchain" => do_blockchain(args)
+      | "code" => do_code(args)
+      | "define" => do_define(args)
+      | "execute" => do_execute(args)
+      | "mine" => do_mine(args)
+      | "transact" => do_transact(args)
       | _ => ()
 
 
 (* ****** ****** *)
 
 implement
+do_balance(args) =
+case+ args of 
+| nil0() => (println!("must provide miner argument"); ())
+| cons0(a, _) => 
+    if is_miner(a) 
+    then let val coins = get_coins(a) in println!("Balance of ", a, " is ", coins) end
+    else println!("unrecognized miner")
+
+implement
 do_execute(args) =
 case+ args of 
-| nil0() => ()
+| nil0() => (println!("must provide file path to execute"); ())
 | cons0(f, args) => file_write_contract((f, val2str(interp(parse_lisp(f)))))
 
 
@@ -121,19 +141,27 @@ end
 implement
 do_transact(args) = 
 case+ args of
-| nil0() => ()
+| nil0() => (println!("must provide argument to transact"); ())
 | cons0(a, args) =>
    case+ args of
-   | nil0() => ()
+   | nil0() => (println!("must provide <to> argument to transact"); ())
    | cons0(b, args) => 
      case+ args of
-     | nil0() => ()
+     | nil0() => (println!("must provide <amount> argument to transact"); ())
      | cons0(c, args) => 
         let val trns = (a, b, string2int(c)) 
         in transact(trns) end
 
 implement
-do_mine() = (chain_add(); clear_transact())
+do_mine(args) = 
+case+ args of
+| nil0() => (println!("must provide <miner> argument"); ())
+| cons0(a, _) => let
+  val test = is_miner(a)
+in
+  if test then (chain_add(); reward(a); clear_transact())
+  else (println!("unrecognized miner - please define miner first"); ())
+end
 
 
 implement
@@ -142,6 +170,36 @@ do_blockchain(args) = let
   val ch = get_chain(from, to)
 in 
   print_chain(ch)
+end
+
+
+implement
+do_define(args) = 
+case+ args of
+| nil0() => (println!("must provide argument to define"); ())
+| cons0(a, _) => let
+  val f = "./" + a + ".txt"
+  val out = fileref_open_exn(f, file_mode_a)
+in
+  if file_exists("blockchain.txt") 
+  then 
+  (
+    let
+      val () = fprint_string(out, "0")
+      val () = fileref_close(out)
+    in
+      ()
+    end
+  )
+  else 
+  (
+    let
+      val () = fprint_string(out, "10")
+      val () = fileref_close(out)
+    in
+      ()
+    end
+  )
 end
 
 (* ****** ****** *)

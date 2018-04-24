@@ -44,14 +44,19 @@ all:: test_dats
 
 regress_basic:: test_dats; ./$<
 
+regress_fibo:: fibo
 regress_fibo:: test_dats; ./$< example/fibo.txt
 
+regress_fact:: fact
 regress_fact:: test_dats; ./$< example/fact.txt
 
+regress_isprime:: isprime
 regress_isprime:: test_dats; ./$< example/isprime.txt
 
+regress_numprime:: numprime
 regress_numprime:: test_dats; ./$< example/numprime.txt
 
+regress_queens:: queens
 regress_queens:: test_dats; ./$< example/queens.txt
 
 ######
