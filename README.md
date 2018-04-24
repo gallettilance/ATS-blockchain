@@ -1,6 +1,6 @@
 # ATS Blockchain
 
-[![Build Status](https://travis-ci.org/galletti94/ATS-blockchain.svg?branch=v.0.2-beta)](https://travis-ci.org/galletti94/ATS-blockchain)
+[![Build Status](https://travis-ci.org/galletti94/ATS-blockchain.svg?branch=master)](https://travis-ci.org/galletti94/ATS-blockchain)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 A blockchain CLI in ATS
