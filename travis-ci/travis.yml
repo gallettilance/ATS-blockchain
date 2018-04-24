@@ -71,6 +71,7 @@ script:
   # Building atscc2r34
   - (cd ${PATSHOME}/contrib/CATS-atscc2r34 && make all && mv -f bin/atscc2r34 ${PATSHOME}/bin/.)
   # Running regress test
+  - git clone https://github.com/ashalkhakov/colorado.git colorado
   - make all
 after_script:
   - date
