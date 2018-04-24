@@ -1,11 +1,7 @@
 ######
 #
-# Cleaning Makefile
+# Makefile
 #
-######
-
-NPM=npm
-
 ######
 
 PATSCC=$(PATSHOME)/bin/patscc
