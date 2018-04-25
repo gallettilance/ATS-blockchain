@@ -9,6 +9,8 @@ A blockchain CLI in ATS
 
 ## About
 
+The CLI is currently to be used in the following way:
+
 1. define miners/users
 2. make transactions (valid or otherwise)
 3. write/execute smart contract
