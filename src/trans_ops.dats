@@ -14,6 +14,10 @@ is_valid_transact(t: transaction): bool
 
 extern
 fun
+make_transact(t: transaction): bool //same as is_valid_transact with necessary side effect
+
+extern
+fun
 get_data(): data
 
 extern
@@ -152,6 +156,30 @@ in
       val test_balance = sender_balance >= amount
     in
       if test_balance
+      then true
+      else false
+    end
+  )
+  else false
+end
+
+
+implement
+make_transact(t) = let
+  val sender = t.0
+  val receiver = t.1
+  val amount = t.2
+  val test_exists = is_miner(sender) andalso is_miner(receiver)
+in
+  if test_exists
+  then
+  ( 
+    let 
+      val sender_balance = get_coins(sender)
+      val receiver_balance = get_coins(receiver)
+      val test_balance = sender_balance >= amount
+    in
+      if test_balance
       then (set_coins(sender, sender_balance - amount); set_coins(receiver, receiver_balance + amount); true)
       else false
     end
@@ -170,6 +198,7 @@ get_data() = let
   val ft = fileref_open_opt("./transaction.txt", file_mode_r)
 in
   case- ft of
+  | ~None_vt() => nil0()
   | ~Some_vt(trns) => let
       val theLines = streamize_fileref_line(trns)
     in

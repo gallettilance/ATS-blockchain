@@ -121,6 +121,7 @@ case+ args of
     then let val coins = get_coins(a) in println!("Balance of ", a, " is ", coins) end
     else println!("unrecognized miner")
 
+
 implement
 do_execute(args) =
 case+ args of 
@@ -138,6 +139,7 @@ in
   file_write_contract((f, val2str(interp(parse_lisp(f)))))
 end
 
+
 implement
 do_transact(args) = 
 case+ args of
@@ -152,15 +154,23 @@ case+ args of
         let val trns = (a, b, string2int(c)) 
         in transact(trns) end
 
+
 implement
 do_mine(args) = 
 case+ args of
 | nil0() => (println!("must provide <miner> argument"); ())
 | cons0(a, _) => let
-  val test = is_miner(a)
+  val test_miner = is_miner(a)
+  val test_transact = list0_length(list0_filter(get_data(), lam(t) => is_valid_transact(t))) > 0
+  val test_code = list0_length(get_result()) > 0
+  val test = test_miner andalso test_transact andalso test_code
 in
-  if test then (chain_add(); reward(a); clear_transact())
-  else (println!("unrecognized miner - please define miner first"); ())
+  ifcase
+  | test => (chain_add(); reward(a); clear_transact())
+  | ~test_miner => (println!("unrecognized miner - please define miner first"); ())
+  | ~test_transact => (println!("must have at least one valid transaction per block"); ())
+  | ~test_code => (println!("must have at least one smart contract per block"); ())
+  | _ => (println!("True = False?"); ())
 end
 
 

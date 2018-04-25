@@ -17,7 +17,8 @@ file_write_block(e: block): void
 implement
 mine(hd) = let 
   val (ind, nonce, trns, code, h) = hd
-  val theValids = list0_filter(trns, lam(t) => is_valid_transact(t))
+  val temp = list0_filter(trns, lam(t) => is_valid_transact(t))
+  val theValids = list0_filter(temp, lam(t) => make_transact(t))
   
   fun aux(hd: header): block = let
       val currh = sha256(encode_header(hd))
