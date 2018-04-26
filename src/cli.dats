@@ -189,26 +189,34 @@ case+ args of
 | nil0() => (println!("must provide argument to define"); ())
 | cons0(a, _) => let
   val f = "./" + a + ".txt"
-  val out = fileref_open_exn(f, file_mode_a)
 in
-  if file_exists("blockchain.txt") 
-  then 
+  if file_exists(f)
+  then (println!(a + " is already defined"); ())
+  else
   (
     let
-      val () = fprint_string(out, "0")
-      val () = fileref_close(out)
+      val out = fileref_open_exn(f, file_mode_a)
     in
-      ()
-    end
-  )
-  else 
-  (
-    let
-      val () = fprint_string(out, "10")
-      val () = fileref_close(out)
-    in
-      ()
-    end
+      if file_exists("blockchain.txt") 
+      then 
+      (
+        let
+          val () = fprint_string(out, "0")
+          val () = fileref_close(out)
+        in
+          ()
+        end
+      )
+      else 
+      (
+        let
+          val () = fprint_string(out, "10")
+          val () = fileref_close(out)
+        in
+          ()
+        end
+      )
+  end
   )
 end
 
