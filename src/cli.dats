@@ -126,8 +126,10 @@ implement
 do_execute(args) =
 case+ args of 
 | nil0() => (println!("must provide file path to execute"); ())
-| cons0(f, args) => file_write_contract((f, val2str(interp(parse_lisp(f)))))
-
+| cons0(f, args) => 
+  if file_exists(f) 
+  then file_write_contract((f, val2str(interp(parse_lisp(f)))))
+  else (println!("Invalid file path"); ())
 
 implement
 do_code(args) = let
