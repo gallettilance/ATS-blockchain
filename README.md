@@ -31,10 +31,11 @@ make regress
 
 ## TODO for next release
 
-- [ ] jsonify blockchain.txt
+- [x] add gas / cost to contracts
+- [ ] let user / miner execute contracts
 - [ ] refine using dependent types
-- [ ] make blockchain distributed
 - [ ] enhance lambda lang to include transactions
+- [ ] make blockchain distributed
 - [ ] enhance lambda lang to be not lisp-like
 - [ ] enhance lambda lang to be typed
 
