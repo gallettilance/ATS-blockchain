@@ -35,6 +35,9 @@ make regress
 - [ ] let user / miner execute contracts
 - [ ] refine using dependent types
 - [ ] enhance lambda lang to include transactions
+
+## TODO for future
+
 - [ ] make blockchain distributed
 - [ ] enhance lambda lang to be not lisp-like
 - [ ] enhance lambda lang to be typed
