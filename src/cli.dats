@@ -128,17 +128,23 @@ case+ args of
 | nil0() => (println!("must provide file path to execute"); ())
 | cons0(f, args) => 
   if file_exists(f) 
-  then file_write_contract((f, val2str(interp(parse_lisp(f)))))
+  then let 
+      val parsed = parse_lisp(f) 
+    in 
+      file_write_contract((f, val2str(interp(parsed)), get_gas(parsed))) 
+    end
   else (println!("Invalid file path"); ())
+
 
 implement
 do_code(args) = let
-  val f = "./temp" + get_time() + ".txt"
+  val f = get_time() + ".txt"
   val out = fileref_open_exn(f, file_mode_a)
   val () = fprint_string(out, encode_usercode(args))
   val () = fileref_close(out)
+  val parsed = parse_lisp(f)
 in
-  file_write_contract((f, val2str(interp(parse_lisp(f)))))
+  file_write_contract((f, val2str(interp(parsed)), get_gas(parsed)))
 end
 
 

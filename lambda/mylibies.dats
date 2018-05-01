@@ -5,6 +5,7 @@
 (* ****** ****** *)
 
 #include "./struct.dats"
+#include "./gas.dats"
 #include "./print_term.dats"
 #include "./print_val.dats"
 #include "./lambda_interp.dats"

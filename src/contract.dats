@@ -4,7 +4,7 @@
 //
 (* ****** ****** *)
 
-typedef contract = (string (* id *), string (* value *))
+typedef contract = (string (* id *), string (* value *), int (* gas / cost *))
 typedef result = list0(contract)
 
 (* ****** ****** *)

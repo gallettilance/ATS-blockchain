@@ -302,8 +302,9 @@ implement
 print_centered_contract(out, c, n) = let
   val id = c.0
   val v = c.1
+  val g = c.2
 in
-  print_centered(out, "id: "+ id +", result: " + v, n)
+  print_centered(out, "id: "+ id +", result: " + v + ", gas = " + int2str(g), n)
 end
 
 

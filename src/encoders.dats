@@ -71,7 +71,7 @@ encode_transact(t) = "{" + t.0 + "," + t.1 + "," + int2str(t.2) + "}"
 
 
 implement
-encode_contract(c) = "{" + c.0 + "," + c.1 + "}"
+encode_contract(c) = "{" + c.0 + "," + c.1 + "," + int2str(c.2) + "}"
 
 
 implement
@@ -133,11 +133,11 @@ end
 implement
 decode_contract(s) = let
   val xs = parse_csv(s)
-  //val () = println!("xs = ", xs)
   val-cons0(id, xs) = xs
-  val-cons0(v, _) = xs
+  val-cons0(v, xs) = xs
+  val-cons0(g, _) = xs
 in
-  (id, v)
+  (id, v, string2int(g))
 end
 
 

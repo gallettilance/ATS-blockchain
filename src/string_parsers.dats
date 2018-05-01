@@ -37,6 +37,10 @@ extern
 fun
 get_time(): string
 
+extern
+fun
+get_date(): string
+
 (* ****** ****** *)
 
 implement
@@ -137,7 +141,7 @@ char *cget_time() {
 
 
 implement
-get_time() = let
+get_date() = let
   
   fun parse(s: string): string = let
     val xs = string_explode(s)
@@ -154,6 +158,42 @@ get_time() = let
         )
   in
     aux(xs, nil0())
+  end
+
+in
+  parse(cget_time())
+end
+
+
+implement
+get_time() = let
+  
+  fun parse(s: string): string = let
+    val xs = string_explode(s)
+  
+    fun aux(xs: list0(char), ys: list0(char), i: int): string =
+      case+ xs of
+      | list0_nil() => string_make_rlist(g1ofg0(ys))
+      | list0_cons(x, xs) => 
+        if x = ' '
+        then 
+        (
+          if i <= 3
+          then aux(xs, ys, i + 1)
+          else aux(xs, cons0('-', ys), i)
+        )
+        else 
+        (
+          if x = '\n' then aux(xs, ys, i)
+          else 
+          (
+            if i >= 3
+            then aux(xs, cons0(x, ys), i)
+            else aux(xs, ys, i)
+          )
+        )
+  in
+    aux(xs, nil0(), 0)
   end
 
 in
