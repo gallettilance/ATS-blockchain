@@ -12,6 +12,7 @@
 #include "./src/file_base.dats"
 #include "./lambda/lisp_parser.dats"
 #include "./query/mylibies.dats"
+#include "./src/string_base2.dats"
 
 (* ****** ****** *)
 

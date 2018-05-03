@@ -93,7 +93,7 @@ encode_contract(c) = "{" + c.0 + "," + c.1 + "," + int2str(c.2) + "}"
 
 
 implement
-encode_state(s) = "{" + s.0 + "," + int2str(s.1) + "}"
+encode_state(s) = "{" + s.0 + "," + s.1 + "," + int2str(s.2) + "}"
 
 
 implement
@@ -178,9 +178,10 @@ implement
 decode_state(s) = let
   val xs = parse_csv(s)
   val-cons0(q, xs) = xs
+  val-cons0(v, xs) = xs
   val-cons0(g, _) = xs
 in
-  (q, string2int(g))
+  (q, v, string2int(g))
 end
 
 

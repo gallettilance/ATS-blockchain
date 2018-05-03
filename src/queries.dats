@@ -4,7 +4,7 @@
 //
 (* ****** ****** *)
 
-typedef statement = (string, int)
+typedef statement = ((* sql command *) string, (* qvalue *) string, (* gas *) int)
 typedef queries = list0(statement)
 
 (* ****** ****** *)

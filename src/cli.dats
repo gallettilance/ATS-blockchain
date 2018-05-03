@@ -66,7 +66,7 @@ cli_start(lines) = let
   val () = println!("    balance <miner>                           Get balance of miner             ")
   val () = println!("    code <lambda-lisp code>                   Code a smart contract            ")
   val () = println!("    define <miner>                            Defines a new miner              ")
-  val () = println!("    execute <path/to/filename.txt>            Execute a new smart contract     ")
+  val () = println!("    execute <-l/q> <path/to/filename.txt>     Execute a new smart contract     ")
   val () = println!("    exit                                      Exits the application            ")
   val () = println!("    mine <miner>                              Specified miner mines a new block")
   val () = println!("    query <query-lisp code>                   Make a DB query                  ")
@@ -134,16 +134,41 @@ case+ args of
 implement
 do_execute(args) =
 case+ args of 
-| nil0() => (println!("must provide file path to execute"); ())
-| cons0(f, args) => 
-  if file_exists(f) 
-  then let 
-      val parsed = parse_lisp(f) 
-    in 
-      file_write_contract((f, val2str(interp(parsed)), get_gas(parsed))) 
-    end
-  else (println!("Invalid file path"); ())
-
+| nil0() => (println!("must provide execution type"); ())
+| cons0(t, args) =>
+  case+ args of
+  | nil0() => (println!("must provide file path"); ())
+  | cons0(f, args) =>
+  (
+    if file_exists(f) 
+    then 
+    (
+      if t = "-l"
+      then
+      (
+        let 
+          val parsed = parse_lisp(f) 
+        in 
+          file_write_contract((f, val2str(interp(parsed)), get_gas(parsed))) 
+        end
+      )
+      else
+      (
+        if t = "-q"
+        then
+        (
+          let 
+            val parsed = qparse_lisp(f)
+            val v = interp(parsed)
+          in 
+            file_write_state((lisp2sql(parsed), qval2str(v), get_gas(parsed))) 
+          end
+        )
+        else (println!("Invalid argument", t); ())
+      )
+    )
+    else (println!("Invalid file path"); ())
+  )
 
 implement
 do_code(args) = let
@@ -164,10 +189,10 @@ do_query(args) = let
   val () = fprint_string(out, encode_usercode(args))
   val () = fileref_close(out)
   val parsed = qparse_lisp(f)
-  val _ = interp(parsed)
+  val v = interp(parsed)
   val () = remove_file(f)
 in
-  file_write_state((lisp2sql(parsed), get_gas(parsed)))
+  file_write_state((lisp2sql(parsed), qval2str(v), get_gas(parsed)))
 end
 
 
