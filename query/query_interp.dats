@@ -9,9 +9,29 @@
 
 (* ****** ****** *)
 
+typedef matrix(a) = list0(list0(a))
+
 extern
 fun
 mkdir(f: string): int
+
+extern
+fun
+{b:t@ype}
+matrix_get_col
+( A: matrix b ) : int
+
+extern
+fun
+{b:t@ype}
+matrix_get_row
+( A: matrix b ) : int
+
+extern
+fun
+{b:t@ype}
+matrix_transpose
+( A: matrix b ) : matrix b
 
 (* ****** ****** *)
 
@@ -36,6 +56,44 @@ interp_ins(q0: query): qvalue
 extern
 fun
 interp_sel(q0: query): qvalue
+
+(* ****** ****** *)
+
+implement
+{a}
+matrix_get_col(A) = 
+case+ A of
+| nil0() => 0
+| cons0(row, _) => list0_length(row)
+
+
+implement
+{a}
+matrix_get_row(A) = list0_length(A)
+
+
+implement
+{a}
+matrix_transpose(A) = let
+
+  val row = matrix_get_row(A)
+  val col = matrix_get_col(A)
+  val () = assertloc(row > 0 andalso col > 0)
+
+  fun get_col
+  (i: int): list0(a) = let
+      val () = assertloc(i >= 0 andalso i < col)
+    in
+      list0_map(A, lam(row) => row[i])
+    end
+    
+  fun aux(i: int, res: matrix a): matrix a =
+    if i < 0 then res
+    else aux(i - 1, cons0(get_col(i), res))
+
+in
+  aux(col - 1, nil0())
+end
 
 (* ****** ****** *)
 
@@ -218,26 +276,31 @@ interp_sel(q0) = let
         else false
       end
   
-  fun aux(xs: list0(qvalue)): qvalue =
+  fun aux(cs: list0(qvalue), res: list0(list0(string))): list0(list0(string)) =
     case+ cs of
-    | nil0() => QVunit()
+    | nil0() => matrix_transpose(list0_reverse(res))
     | cons0(c, cs) =>
       let
         val-QVstr(s) = c
         val ft = fileref_open_opt(table + s, file_mode_r)
       in
         case- ft of
-        | ~None_vt() => nil0()
+        | ~None_vt() => aux(cs, cons0(nil0(), res))
         | ~Some_vt(lines) => let
             val theLines = streamize_fileref_line(lines)
           in
             case- !theLines of
-            | ~stream_vt_cons(l, theLines) => 
+            | ~stream_vt_cons(l, theLines) => (~theLines; aux(cs, cons0(parse_csv(l), res)))
           end
       end
 
 in
-  aux(cvs)
+  let
+    val xs = aux(cvs, nil0())
+    val qs = list0_map<list0(string)><qvalue>(xs, lam(ys) => QVrec(list0_map<string><qvalue>(ys, lam(y) => QVstr(y))))
+  in
+    QVrec(qs)
+  end
 end
 
 

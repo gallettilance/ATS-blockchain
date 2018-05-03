@@ -10,7 +10,7 @@ datatype query =
 | Qrec of (querylst)
 | Qcrt of (string (* table name *), querylst (* column names *))
 | Qins of (query (* record *), string (* table name *), querylst (* column names *))
-| Qsel of (querylst (* columns *), query (* from table *)) //, query (* condition *))
+| Qsel of (querylst (* columns *), string (* from table *)) //, query (* condition *))
 | Qopr of (string (* operator *), querylst (* operands *))
 
 where querylst = list0(query)
