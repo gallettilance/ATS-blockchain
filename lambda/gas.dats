@@ -6,12 +6,14 @@
 
 extern
 fun
-get_gas(t: term): int
+get_gas_lambda(t: term): int
+
+overload get_gas with get_gas_lambda
 
 (* ****** ****** *)
 
 implement
-get_gas(t) = let
+get_gas_lambda(t) = let
   fun aux(t0: term, res: int): int =
     case+ t0 of
     | TMint(_)       =>    res + 1

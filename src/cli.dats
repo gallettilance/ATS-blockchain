@@ -50,6 +50,10 @@ extern
 fun
 do_balance(args: list0(string)): void
 
+extern
+fun
+do_query(args: list0(string)): void
+
 (* ****** ****** *)
 
 implement
@@ -65,9 +69,13 @@ cli_start(lines) = let
   val () = println!("    execute <path/to/filename.txt>            Execute a new smart contract     ")
   val () = println!("    exit                                      Exits the application            ")
   val () = println!("    mine <miner>                              Specified miner mines a new block")
+  val () = println!("    query <query-lisp code>                   Make a DB query                  ")
   val () = println!("    transact <from> <to> <ammount>            Create a new transaction         ")
   val () = println!("                                                                               ")
   val () = println!("                                                                               ")
+  val err = $extfcall(int, "mkdir", "./BDB", 0700)
+  val () = assertloc(err = 0)
+
   
 in
   read_loop(lines)
@@ -106,6 +114,7 @@ cli_do(args) =
       | "define" => do_define(args)
       | "execute" => do_execute(args)
       | "mine" => do_mine(args)
+      | "query" => do_query(args)
       | "transact" => do_transact(args)
       | _ => ()
 
@@ -138,13 +147,27 @@ case+ args of
 
 implement
 do_code(args) = let
-  val f = get_time() + ".txt"
+  val f = "lam" + get_time() + ".txt"
   val out = fileref_open_exn(f, file_mode_a)
   val () = fprint_string(out, encode_usercode(args))
   val () = fileref_close(out)
   val parsed = parse_lisp(f)
 in
   file_write_contract((f, val2str(interp(parsed)), get_gas(parsed)))
+end
+
+
+implement
+do_query(args) = let
+  val f = "lql" + get_time() + ".txt"
+  val out = fileref_open_exn(f, file_mode_a)
+  val () = fprint_string(out, encode_userquery(args))
+  val () = fileref_close(out)
+  val parsed = qparse_lisp(f)
+  val _ = interp(parsed)
+  val () = remove_file(f)
+in
+  file_write_state((lisp2sql(parsed), get_gas(parsed)))
 end
 
 

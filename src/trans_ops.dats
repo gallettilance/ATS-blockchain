@@ -26,10 +26,6 @@ encode_transact(t: transaction): string
 
 extern
 fun
-remove_file(f: string): void = "mac#remove_file_c"
-
-extern
-fun
 clear_transact(): void
 
 extern
@@ -46,14 +42,6 @@ set_coins(a: string, q: int): void
 
 extern
 fun
-file_exists_aux(f: string): int = "mac#file_exists_c"
-
-extern
-fun
-file_exists(f: string): bool
-
-extern
-fun
 is_miner(a: string): bool
 
 extern
@@ -61,24 +49,6 @@ fun
 reward(a: string): void
 
 (* ****** ****** *)
-
-implement
-file_exists(f) = if file_exists_aux(f) = 1 then true else false
-
-
-%{
-#include <unistd.h>
-#include <stdbool.h>
-
-int file_exists_c(char* f) {
-  if (access(f, F_OK) != -1) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-%}
-
 
 implement
 is_miner(a) = file_exists("./" + a + ".txt")
@@ -120,14 +90,6 @@ set_coins(a, q) = let
 in
   ()
 end
-
-
-%{
-void remove_file_c(char* f) {
-  int res = remove(f);
-  return;
-}
-%}
 
 
 implement
