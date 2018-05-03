@@ -189,11 +189,57 @@ interp_ins(q0) = let
             aux(cs, rs)
           end
       end
+
 in
   if created_check(cvs)
   then aux(cvs, rvs)
   else (println!("table or column not defined"); QVunit())
 end
+
+
+implement
+interp_sel(q0) = let
+  #define :: list0_cons
+  #define nil list0_nil
+
+  val-Qsel(cs, t_name) = q0
+  val cvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
+  val table = "./BDB/"+ t_name +"/"
+  
+  fun created_check(cs: list0(qvalue)): bool = 
+    case+ cs of
+    | nil0() => true
+    | cons0(c, cs) =>
+      let 
+        val-QVstr(s) = c
+      in
+        if file_exists(table + s)
+        then created_check(cs)
+        else false
+      end
+  
+  fun aux(xs: list0(qvalue)): qvalue =
+    case+ cs of
+    | nil0() => QVunit()
+    | cons0(c, cs) =>
+      let
+        val-QVstr(s) = c
+        val ft = fileref_open_opt(table + s, file_mode_r)
+      in
+        case- ft of
+        | ~None_vt() => nil0()
+        | ~Some_vt(lines) => let
+            val theLines = streamize_fileref_line(lines)
+          in
+            case- !theLines of
+            | ~stream_vt_cons(l, theLines) => 
+          end
+      end
+
+in
+  aux(cvs)
+end
+
 
 (* ****** ****** *)
 
