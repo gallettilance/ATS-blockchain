@@ -11,9 +11,11 @@
 
 typedef matrix(a) = list0(list0(a))
 
+(*
 extern
 fun
 mkdir(f: string): int
+*)
 
 extern
 fun
@@ -158,7 +160,7 @@ in
     )
 end
 
-%{
+(*
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -172,8 +174,7 @@ int make_dir(char* f) {
   } else {
     return 1;
   }
-%}
-
+*)
 
 implement
 interp_crt(q0) = let
@@ -183,6 +184,8 @@ interp_crt(q0) = let
   val-Qcrt(t_name, cs) = q0
   val qvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
   val table = "./BDB/"+ t_name +"/"
+  val err = $extfcall(int, "mkdir", table, 0700)
+  val () = assertloc(err = 0)
   
   fun aux(cs: list0(qvalue)): qvalue = 
     case+ cs of
@@ -303,6 +306,17 @@ in
   end
 end
 
+(* ****** ****** *)
+
+implement
+main0() = ()
+where
+{
+  val err = $extfcall(int, "mkdir", "./BDB", 0700)
+  val () = assertloc(err = 0)
+  val create_table = Qcrt("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
+  val-QVunit() = interp(create_table)
+}
 
 (* ****** ****** *)
 
