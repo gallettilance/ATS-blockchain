@@ -317,11 +317,15 @@ where
   val () = assertloc(err = 0)
   val create_table = Qcrt("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
   val-QVunit() = interp(create_table)
-  val insert = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("hello"), Qint(1))))
-  val-QVunit() = interp(insert)
+  val insert1 = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("hello"), Qint(1))))
+  val-QVunit() = interp(insert1)
+  val insert2 = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("world"), Qint(2))))
+  val-QVunit() = interp(insert2)
+  val insert3 = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("!!!"), Qint(3))))
+  val-QVunit() = interp(insert3)
   val select = Qsel("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
   val-QVrec(xs) = interp(select)
-  val () = println!(xs)
+  val () = (xs).foreach()(lam(x) => println!(x))
 }
 
 (* ****** ****** *)
