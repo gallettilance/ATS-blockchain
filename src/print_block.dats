@@ -83,12 +83,11 @@ fprint_block(out, b0) = let
   val qry = head.4
   val prevh = head.5
   
-  val max = list0_foldleft<int>(qry, 0, lam(res, x) => let val m = list0_length(string_explode(x.0)) + list0_length(string_explode(x.1)) + list0_length(string_explode(int2str(x.2))) in if m > res then m else res end)
+  val max = list0_foldleft<int>(qry, 0, lam(res, x) => let val m = 10 + list0_length(string_explode(x.0)) + list0_length(string_explode(x.1)) + list0_length(string_explode(int2str(x.2))) in if m > res then m else res end)
   
   val col = 17
   val r = (if max > 70 then max else 70) : int
   val row = r + col
-
 in
 (
   print_line(out, row);
@@ -373,8 +372,11 @@ print_centered_state(out, s, n) = let
   val q = s.0
   val v = s.1
   val g = s.2
+  val qs = string_explode(q)
 in
-  print_centered(out, q + "| out: " + v + " | GAS = " + int2str(g), n)
+  if qs[0] = 'S' andalso qs[1] = 'E'
+  then print_centered(out, "SELECT QUERY output: " + v + " | GAS = " + int2str(g), n)
+  else print_centered(out, q + " | GAS = " + int2str(g), n)
 end
 
 

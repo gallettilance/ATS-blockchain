@@ -295,13 +295,18 @@ interp_sel(q0) = let
             | ~stream_vt_cons(l, theLines) => (~theLines; aux(cs, cons0(parse_csv(l), res)))
           end
       end
-
+  
+  fun is_not_nil(v: qvalue): bool =
+    case- v of
+    | QVstr(s) => list0_length(string_explode(s)) = 0
+    | QVrec(xs) => list0_length(list0_filter(xs, lam(x) => is_not_nil(x))) = 0
+    
 in
   let
     val xs = aux(cvs, nil0())
     val qs = list0_map<list0(string)><qvalue>(xs, lam(ys) => QVrec(list0_map<string><qvalue>(ys, lam(y) => QVstr(y))))
   in
-    QVrec(qs)
+    QVrec(list0_filter(qs, lam(q) => is_not_nil(q)))
   end
 end
 
