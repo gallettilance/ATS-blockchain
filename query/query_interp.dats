@@ -6,6 +6,7 @@
 
 #include "./../mylibies.dats"
 #include "./struct.dats"
+#include "./print_qval.dats"
 
 (* ****** ****** *)
 
@@ -208,9 +209,9 @@ interp_ins(q0) = let
   #define :: list0_cons
   #define nil list0_nil
 
-  val-Qins(q0, t_name, cs) = q0
+  val-Qins(t_name, cs, q1) = q0
   val cvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
-  val-Qrec(rs) = q0
+  val-Qrec(rs) = q1
   val rvs = list0_map<query><qvalue>(rs, lam(t) => interp(t))
   val table = "./BDB/"+ t_name +"/"
 
@@ -263,7 +264,7 @@ interp_sel(q0) = let
   #define :: list0_cons
   #define nil list0_nil
 
-  val-Qsel(cs, t_name) = q0
+  val-Qsel(t_name, cs) = q0
   val cvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
   val table = "./BDB/"+ t_name +"/"
   
@@ -316,6 +317,11 @@ where
   val () = assertloc(err = 0)
   val create_table = Qcrt("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
   val-QVunit() = interp(create_table)
+  val insert = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("hello"), Qint(1))))
+  val-QVunit() = interp(insert)
+  val select = Qsel("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
+  val-QVrec(xs) = interp(select)
+  val () = println!(xs)
 }
 
 (* ****** ****** *)
