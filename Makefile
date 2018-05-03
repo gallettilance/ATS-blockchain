@@ -48,7 +48,7 @@ cleanlam
 cleanlam:: ; \
 $(MAKE) -C lambda -f Makefile cleanall
 
-
 cleanall:: clean
+cleanall:: ; rm -rf BDB/
 
 ###### end of [Makefile] ######

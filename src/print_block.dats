@@ -30,7 +30,15 @@ print_centered_contract(out: FILEref, c: contract, n: int): void
 
 extern
 fun
+print_centered_state(out: FILEref, s: statement, n: int): void
+
+extern
+fun
 print_result(xs: result, n: int, col: int): void
+
+extern
+fun
+print_queries(xs: queries, n: int, col: int): void
 
 (* ****** ****** *)
 
@@ -72,7 +80,8 @@ fprint_block(out, b0) = let
   val nounce = int2str(head.1)
   val data = head.2
   val res = head.3
-  val prevh = head.4
+  val qry = head.4
+  val prevh = head.5
   
   val col = 17
   val row = 70 + col
@@ -103,6 +112,9 @@ in
   
   print_line(out, row);
   print_result(res, row - col - 3, col);
+  
+  print_line(out, row);
+  print_queries(qry, row - col - 3, col);
   
   print_line(out, row);
   fprint!(out, "|");
@@ -307,6 +319,59 @@ in
   print_centered(out, "id: "+ id +", result: " + v + ", gas = " + int2str(g), n)
 end
 
+
+implement
+print_queries(xs, n, col) = let
+  val N = list0_length(xs)
+  val padup = (N - 1) / 2
+  val paddown = N - 1 - padup
+
+  fun aux(xs: queries, padup: int, paddown: int): void =
+    case+ xs of
+    | nil0() => ()
+    | cons0(x, xs) =>
+          if padup = 0 
+          then (
+            fprint!(stdout_ref, "|");
+            print_centered(stdout_ref, "Queries", col);
+            fprint!(stdout_ref, "|");
+            print_centered_state(stdout_ref, x, n);
+            fprint!(stdout_ref, "|\n");
+            aux(xs, padup - 1, paddown - 1)
+          )
+          else
+          (
+            if padup < 0 
+            then 
+            (
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, "", col);
+              fprint!(stdout_ref, "|");
+              print_centered_state(stdout_ref, x, n);
+              fprint!(stdout_ref, "|\n");
+              aux(xs, padup - 1, paddown - 1)
+            )
+            else 
+            (
+              fprint!(stdout_ref, "|");
+              print_centered(stdout_ref, "", col);
+              fprint!(stdout_ref, "|");
+              print_centered_state(stdout_ref, x, n);
+              fprint!(stdout_ref, "|\n");
+              aux(xs, padup - 1, paddown)
+            )
+          )
+in
+  aux(xs, padup, paddown)
+end
+
+implement
+print_centered_state(out, s, n) = let
+  val q = s.0
+  val g = s.1
+in
+  print_centered(out, q +" -- GAS = " + int2str(g), n)
+end
 
 
 (* ****** ****** *)

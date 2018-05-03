@@ -13,7 +13,9 @@ overload get_gas with get_gas_query
 (* ****** ****** *)
 
 implement
-get_gas_query(q) = let
+get_gas_query(q) = 0
+(*
+let
   fun aux(q0: query, res: int): int =
     case+ q0 of
     | Qint(_)         =>  res + 1
@@ -26,6 +28,7 @@ get_gas_query(q) = let
 in
   aux(q, 0)
 end
+*)
 
 (* ****** ****** *)
 

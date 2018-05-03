@@ -16,7 +16,7 @@ file_write_block(e: block): void
 
 implement
 mine(hd) = let 
-  val (ind, nonce, trns, code, h) = hd
+  val (ind, nonce, trns, code, qry, h) = hd
   val temp = list0_filter(trns, lam(t) => is_valid_transact(t))
   val theValids = list0_filter(temp, lam(t) => make_transact(t))
   
@@ -25,13 +25,13 @@ mine(hd) = let
     in
       if valid_hash(currh) then (hd, currh, get_time())
       else let
-        val (ind, nonce, data, res, prevh) = hd
+        val (ind, nonce, data, res, qry, prevh) = hd
       in
-        aux((ind, nonce + 1, data, res, prevh))
+        aux((ind, nonce + 1, data, res, qry, prevh))
       end
     end
 in
-  aux((ind, nonce, theValids, code, h))
+  aux((ind, nonce, theValids, code, qry, h))
 end
 
 
