@@ -5,7 +5,8 @@
 (* ****** ****** *)
 
 typedef statement = (string, int)
+typedef queries = list0(statement)
 
 (* ****** ****** *)
 
-(* end of [statement.dats] *)
+(* end of [queries.dats] *)

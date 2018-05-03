@@ -26,6 +26,10 @@ encode_contract(c: contract): string
 
 extern
 fun
+encode_state(s: statement): string
+
+extern
+fun
 encode_result(r: result): string
 
 extern
@@ -52,6 +56,10 @@ decode_contract(s: string): contract
 
 extern
 fun
+decode_state(s: string): statement
+
+extern
+fun
 decode_result(s: string): result
 
 (* ****** ****** *)
@@ -66,12 +74,17 @@ in
   s
 end
 
+
 implement
 encode_transact(t) = "{" + t.0 + "," + t.1 + "," + int2str(t.2) + "}"
 
 
 implement
 encode_contract(c) = "{" + c.0 + "," + c.1 + "," + int2str(c.2) + "}"
+
+
+implement
+encode_state(s) = "{" + s.0 + "," + int2str(s.1) + "}"
 
 
 implement

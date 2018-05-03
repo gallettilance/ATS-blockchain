@@ -9,6 +9,7 @@
 #include "./print_query.dats"
 #include "./query_interp.dats"
 #include "./lisp_parser.dats"
+#include "./gas.dats"
 
 (* ****** ****** *)
 

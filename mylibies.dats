@@ -18,7 +18,7 @@
 #include "./src/hash.dats"
 #include "./src/transaction.dats"
 #include "./src/contract.dats"
-#include "./src/statement.dats"
+#include "./src/queries.dats"
 #include "./src/block.dats"
 #include "./src/string_parsers.dats"
 
@@ -28,7 +28,7 @@
 #include "./src/hash_ops.dats"
 #include "./src/trans_ops.dats"
 #include "./src/contr_ops.dats"
-#include "./src/state_ops.dats"
+#include "./src/query_ops.dats"
 #include "./src/print_block.dats"
 #include "./src/block_ops.dats"
 #include "./src/chain_ops.dats"

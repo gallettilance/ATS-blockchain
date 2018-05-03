@@ -161,7 +161,7 @@ implement
 do_query(args) = let
   val f = "lql" + get_time() + ".txt"
   val out = fileref_open_exn(f, file_mode_a)
-  val () = fprint_string(out, encode_userquery(args))
+  val () = fprint_string(out, encode_usercode(args))
   val () = fileref_close(out)
   val parsed = qparse_lisp(f)
   val _ = interp(parsed)
