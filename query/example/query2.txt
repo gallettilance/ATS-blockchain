@@ -1,0 +1,1 @@
+(Qins mytable (Qrec (Qstr col1) (Qstr col2)) (Qrec (Qstr hello) (Qint 1)))

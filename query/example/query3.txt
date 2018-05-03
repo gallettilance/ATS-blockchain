@@ -1,0 +1,1 @@
+(Qsel mytable (Qrec (Qstr col1) (Qstr col2)))

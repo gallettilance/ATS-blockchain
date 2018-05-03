@@ -10,9 +10,9 @@ PATSLIB=$(PATSHOME)/ccomp/atslib
 
 ######
 
-all:: query_interp_dats
+all:: test_dats
 regress:: all
-regress:: query_interp_dats; ./$<
+regress:: test_dats; ./$<
 
 ######
 
@@ -32,7 +32,8 @@ clean:: ; rm -f *_?ats.o
 clean:: ; rm -f *_?ats.c
 
 cleanall:: clean
-cleanall:: ; rm -f query_interp_dats
+cleanall:: ; rm -f test_dats
 cleanall:: ; rm -rf BDB/
+cleanall:: ; rm -f example/output*
 
 ###### end of [Makefile] ######

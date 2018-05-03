@@ -4,12 +4,6 @@
 //
 (* ****** ****** *)
 
-#include "./../mylibies.dats"
-#include "./struct.dats"
-#include "./print_qval.dats"
-
-(* ****** ****** *)
-
 typedef matrix(a) = list0(list0(a))
 
 (*
@@ -119,7 +113,8 @@ interp_opr(t0) = let
   #define :: list0_cons
   #define nil list0_nil
 
-  val-Qopr(opr, ts) = t0
+  val-Qopr(opr, terms) = t0
+  val-Qrec(ts) = terms
   val qvs = list0_map<query><qvalue>(ts, lam(t) => interp(t))
 
 in
@@ -182,7 +177,8 @@ interp_crt(q0) = let
   #define :: list0_cons
   #define nil list0_nil
 
-  val-Qcrt(t_name, cs) = q0
+  val-Qcrt(t_name, cols) = q0
+  val-Qrec(cs) = cols
   val qvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
   val table = "./BDB/"+ t_name +"/"
   val err = $extfcall(int, "mkdir", table, 0700)
@@ -209,7 +205,8 @@ interp_ins(q0) = let
   #define :: list0_cons
   #define nil list0_nil
 
-  val-Qins(t_name, cs, q1) = q0
+  val-Qins(t_name, cols, q1) = q0
+  val-Qrec(cs) = cols
   val cvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
   val-Qrec(rs) = q1
   val rvs = list0_map<query><qvalue>(rs, lam(t) => interp(t))
@@ -264,7 +261,8 @@ interp_sel(q0) = let
   #define :: list0_cons
   #define nil list0_nil
 
-  val-Qsel(t_name, cs) = q0
+  val-Qsel(t_name, cols) = q0
+  val-Qrec(cs) = cols
   val cvs = list0_map<query><qvalue>(cs, lam(t) => interp(t))
   val table = "./BDB/"+ t_name +"/"
   
@@ -306,27 +304,6 @@ in
     QVrec(qs)
   end
 end
-
-(* ****** ****** *)
-
-implement
-main0() = ()
-where
-{
-  val err = $extfcall(int, "mkdir", "./BDB", 0700)
-  val () = assertloc(err = 0)
-  val create_table = Qcrt("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
-  val-QVunit() = interp(create_table)
-  val insert1 = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("hello"), Qint(1))))
-  val-QVunit() = interp(insert1)
-  val insert2 = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("world"), Qint(2))))
-  val-QVunit() = interp(insert2)
-  val insert3 = Qins("mytable", list0_tuple(Qstr("col1"), Qstr("col2")), Qrec(list0_tuple(Qstr("!!!"), Qint(3))))
-  val-QVunit() = interp(insert3)
-  val select = Qsel("mytable", list0_tuple(Qstr("col1"), Qstr("col2")))
-  val-QVrec(xs) = interp(select)
-  val () = (xs).foreach()(lam(x) => println!(x))
-}
 
 (* ****** ****** *)
 
