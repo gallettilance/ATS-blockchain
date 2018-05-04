@@ -64,7 +64,7 @@ end
 
 
 implement
-clear_transact() = (remove_file("./transaction.txt"); remove_file("./value.txt"))  
+clear_transact() = (remove_file("./transaction.txt"); remove_file("./value.txt"); remove_file("./queries.txt"))  
 
 
 implement

@@ -231,6 +231,7 @@ case+ args of
   val test_miner = is_miner(a)
   val test_transact = list0_length(list0_filter(get_data(), lam(t) => is_valid_transact(t))) > 0
   val test_code = list0_length(get_result()) > 0
+  val test_query = list0_length(get_queries()) > 0
   val test = test_miner andalso test_transact andalso test_code
 in
   ifcase
@@ -238,6 +239,7 @@ in
   | ~test_miner => (println!("unrecognized miner - please define miner first"); ())
   | ~test_transact => (println!("must have at least one valid transaction per block"); ())
   | ~test_code => (println!("must have at least one smart contract per block"); ())
+  | ~test_query => (println!("must have at least one query per block"); ())
   | _ => (println!("True = False?"); ())
 end
 

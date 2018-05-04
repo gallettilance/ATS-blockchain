@@ -16,6 +16,10 @@ extern
 fun
 get_queries(): queries
 
+extern
+fun
+clear_queries(): void
+
 (* ****** ****** *)
 
 implement
