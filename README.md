@@ -29,3 +29,7 @@ After installing [ATS](http://www.ats-lang.org/), simply run
 git clone https://github.com/ashalkhakov/colorado.git  
 make regress
 ```
+
+------
+
+Pull requests are welcome!
