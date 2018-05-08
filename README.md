@@ -23,9 +23,10 @@ The full report is online. Part 1 is [here](https://beta.observablehq.com/@galle
 
 ## Running the application
 
-After installing [ATS](http://www.ats-lang.org/), simply run
+After installing [ATS](http://www.ats-lang.org/), cloning the repo simply run
 
 ```shell
+cd ATS-Blockchain  
 git clone https://github.com/ashalkhakov/colorado.git  
 make regress
 ```
