@@ -23,7 +23,7 @@ The full report is online. Part 1 is [here](https://beta.observablehq.com/@galle
 
 ## Running the application
 
-After installing [ATS](http://www.ats-lang.org/) and cloning the repo, simply run
+Currently only supported on Linux. After installing [ATS](http://www.ats-lang.org/) and cloning the repo, simply run
 
 ```shell
 cd ATS-blockchain  
